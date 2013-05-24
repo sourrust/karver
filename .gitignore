@@ -1,0 +1,12 @@
+# OS Level
+.DS_Store
+
+# Compiled files
+*.o
+*.hi
+
+# cabal build
+dist/
+
+# Generated docs
+docs/

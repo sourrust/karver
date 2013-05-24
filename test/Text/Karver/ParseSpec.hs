@@ -34,7 +34,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "untill the end" $ do
+    it "until the end" $ do
       let fullText = "all this text is here"
           value    = literal fullText
           expected = Right $ Literal fullText

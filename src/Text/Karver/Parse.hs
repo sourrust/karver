@@ -21,21 +21,15 @@ surroundParser tokenParser = do
   return tok
 
 identityParser :: Parser Tokens
-identityParser = do
-  string "{{"
-  skipSpace
-  ident <- takeTill (inClass " }")
-  skipSpace
-  string "}}"
-  return $ Identity ident
+identityParser =
+  surroundParser $ do
+    ident <- takeTill (inClass " }")
+    return $ Identity ident
 
 objectParser :: Parser Tokens
-objectParser = do
-  string "{{"
-  skipSpace
-  obj <- takeTill (inClass " .}")
-  char '.'
-  key <- takeTill (inClass " }")
-  skipSpace
-  string "}}"
-  return $ Object obj key
+objectParser =
+  surroundParser $ do
+    obj <- takeTill (inClass " .}")
+    char '.'
+    key <- takeTill (inClass " }")
+    return $ Object obj key

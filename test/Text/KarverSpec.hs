@@ -75,7 +75,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "mix of object a identity" $ do
+    it "mix of object a identity #1" $ do
       let mixText  = "My {{ project }} is your {{ template.name }}."
           value    = renderer mixText
           expected = "My karver is your karver."

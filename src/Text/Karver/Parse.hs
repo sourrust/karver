@@ -24,7 +24,7 @@ objectParser :: Parser Tokens
 objectParser = do
   string "{{"
   skipSpace
-  obj <- takeTill (== '.')
+  obj <- takeTill (inClass " .}")
   char '.'
   key <- takeTill (inClass " }")
   skipSpace

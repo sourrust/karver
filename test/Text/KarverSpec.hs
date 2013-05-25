@@ -3,6 +3,7 @@
 module Text.KarverSpec (spec) where
 
 import Text.Karver
+import Text.Karver.Types
 
 import Prelude hiding (unlines)
 import Data.HashMap.Strict (fromList)
@@ -11,9 +12,11 @@ import Test.Hspec
 
 renderer :: Text -> Text
 renderer = renderTemplate
-  (fromList $ [ ("project",     "karver")
-              , ("language",    "haskell")
-              , ("ver-control", "git")
+  (fromList $ [ ("project",     String "karver")
+              , ("language",    String "haskell")
+              , ("ver-control", String "git")
+              , ("template",    Map $ fromList
+                                  [ ("name", "karver")])
               ])
 
 spec :: Spec
@@ -62,5 +65,26 @@ spec = do
                         , "if need something done faster"
                         , "you need something written in haskell"
                         ]
+
+      value `shouldBe` expected
+
+    it "object identity" $ do
+      let objText  = "Templating with {{ template.name }} is easy."
+          value    = renderer objText
+          expected = "Templating with karver is easy."
+
+      value `shouldBe` expected
+
+    it "mix of object a identity #1" $ do
+      let mixText  = "My {{ project }} is your {{ template.name }}."
+          value    = renderer mixText
+          expected = "My karver is your karver."
+
+      value `shouldBe` expected
+
+    it "mix of object a identity #2" $ do
+      let mixText  = "My {{ template.name }} is your {{ project }}."
+          value    = renderer mixText
+          expected = "My karver is your karver."
 
       value `shouldBe` expected

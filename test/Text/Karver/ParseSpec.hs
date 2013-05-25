@@ -85,7 +85,7 @@ spec = do
 
       value `shouldBe` expected
 
-  describe "objectParse" $ do
+  describe "objectParser" $ do
     it "no object present" $ do
       let noObj = "{{ name }}"
           value = object noObj

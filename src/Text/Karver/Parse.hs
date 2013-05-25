@@ -18,4 +18,15 @@ identityParser = do
   ident <- takeTill (inClass " }")
   skipSpace
   string "}}"
-  return $! Identity ident
+  return $ Identity ident
+
+objectParser :: Parser Tokens
+objectParser = do
+  string "{{"
+  skipSpace
+  obj <- takeTill (== '.')
+  char '.'
+  key <- takeTill (inClass " }")
+  skipSpace
+  string "}}"
+  return $ Object obj key

@@ -11,6 +11,15 @@ literalParser = do
   html <- takeWhile1 (/= '{')
   return $ Literal html
 
+surroundParser :: Parser Tokens -> Parser Tokens
+surroundParser tokenParser = do
+  string "{{"
+  skipSpace
+  tok <- tokenParser
+  skipSpace
+  string "}}"
+  return tok
+
 identityParser :: Parser Tokens
 identityParser = do
   string "{{"

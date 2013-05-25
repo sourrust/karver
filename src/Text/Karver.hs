@@ -33,4 +33,4 @@ renderTemplate varTable strTemplate = merge $
               case H.lookup k m of
                 (Just x) -> x
                 Nothing  -> T.empty
-            _                -> T.empty
+            _              -> T.empty

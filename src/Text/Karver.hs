@@ -16,7 +16,9 @@ renderTemplate varTable strTemplate = merge $
     (Left err)  -> [Literal $ T.pack err]
     (Right res) -> res
   where render :: Parser [Tokens]
-        render = many1 $ identityParser <|> literalParser
+        render = many1 $ objectParser
+                     <|> identityParser
+                     <|> literalParser
 
         merge :: [Tokens] -> Text
         merge = T.concat . map mergeMap

@@ -27,3 +27,10 @@ renderTemplate varTable strTemplate = merge $
           case H.lookup x varTable of
             (Just (String s)) -> s
             _                 -> T.empty
+        mergeMap (Object i k) =
+          case H.lookup i varTable of
+            (Just (Map m)) ->
+              case H.lookup k m of
+                (Just x) -> x
+                Nothing  -> T.empty
+            _                -> T.empty

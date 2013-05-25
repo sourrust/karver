@@ -7,9 +7,14 @@ license-file:          LICENSE
 copyright:             (c) 2013 Jeremy Hull
 author:                Jeremy Hull <sourdrums@gmail.com>
 maintainer:            Jeremy Hull <sourdrums@gmail.com>
+bug-reports:           https://github.com/sourrust/karver/issues
 stability:             experimental
 category:              Text
 tested-with:           GHC == 7.4.2
+
+source-repository head
+  type:                git
+  location:            git://github.com/sourrust/karver.git
 
 library
   ghc-options:         -Wall

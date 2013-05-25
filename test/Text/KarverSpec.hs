@@ -3,6 +3,7 @@
 module Text.KarverSpec (spec) where
 
 import Text.Karver
+import Text.Karver.Types
 
 import Prelude hiding (unlines)
 import Data.HashMap.Strict (fromList)
@@ -11,9 +12,9 @@ import Test.Hspec
 
 renderer :: Text -> Text
 renderer = renderTemplate
-  (fromList $ [ ("project",     "karver")
-              , ("language",    "haskell")
-              , ("ver-control", "git")
+  (fromList $ [ ("project",     String "karver")
+              , ("language",    String "haskell")
+              , ("ver-control", String "git")
               ])
 
 spec :: Spec

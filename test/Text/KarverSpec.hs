@@ -15,6 +15,8 @@ renderer = renderTemplate
   (fromList $ [ ("project",     String "karver")
               , ("language",    String "haskell")
               , ("ver-control", String "git")
+              , ("template",    Map $ fromList
+                                  [ ("name", "karver")])
               ])
 
 spec :: Spec
@@ -63,5 +65,12 @@ spec = do
                         , "if need something done faster"
                         , "you need something written in haskell"
                         ]
+
+      value `shouldBe` expected
+
+    it "object identity" $ do
+      let objText  = "Templating with {{ template.name }} is easy."
+          value    = renderer objText
+          expected = "Templating with karver is easy."
 
       value `shouldBe` expected

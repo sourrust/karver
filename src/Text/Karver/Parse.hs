@@ -1,6 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Text.Karver.Parse where
+module Text.Karver.Parse
+( literalParser
+, identityParser
+, objectParser
+) where
 
 import Text.Karver.Types
 

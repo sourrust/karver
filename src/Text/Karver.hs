@@ -10,7 +10,7 @@ import qualified Data.HashMap.Strict as H
 import Data.Text (Text)
 import qualified Data.Text as T
 
-renderTemplate :: HashMap Text Text -> Text -> Text
+renderTemplate :: HashMap Text Value -> Text -> Text
 renderTemplate varTable strTemplate = merge $
   case parseOnly render strTemplate of
     (Left err)  -> [Literal $ T.pack err]
@@ -23,5 +23,5 @@ renderTemplate varTable strTemplate = merge $
         mergeMap (Literal x)  = x
         mergeMap (Identity x) =
           case H.lookup x varTable of
-            (Just y) -> y
-            Nothing  -> T.pack ""
+            (Just (String s)) -> s
+            _                 -> T.empty

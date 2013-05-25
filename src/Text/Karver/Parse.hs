@@ -1,6 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Text.Karver.Parse where
+module Text.Karver.Parse
+( literalParser
+, identityParser
+, objectParser
+) where
 
 import Text.Karver.Types
 
@@ -11,22 +15,25 @@ literalParser = do
   html <- takeWhile1 (/= '{')
   return $ Literal html
 
-identityParser :: Parser Tokens
-identityParser = do
+surroundParser :: Parser Tokens -> Parser Tokens
+surroundParser tokenParser = do
   string "{{"
   skipSpace
-  ident <- takeTill (inClass " }")
+  tok <- tokenParser
   skipSpace
   string "}}"
-  return $ Identity ident
+  return tok
+
+identityParser :: Parser Tokens
+identityParser =
+  surroundParser $ do
+    ident <- takeTill (inClass " }")
+    return $ Identity ident
 
 objectParser :: Parser Tokens
-objectParser = do
-  string "{{"
-  skipSpace
-  obj <- takeTill (inClass " .}")
-  char '.'
-  key <- takeTill (inClass " }")
-  skipSpace
-  string "}}"
-  return $ Object obj key
+objectParser =
+  surroundParser $ do
+    obj <- takeTill (inClass " .}")
+    char '.'
+    key <- takeTill (inClass " }")
+    return $ Object obj key

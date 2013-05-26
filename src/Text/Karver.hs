@@ -9,6 +9,7 @@ import Data.HashMap.Strict (HashMap)
 import qualified Data.HashMap.Strict as H
 import Data.Text (Text)
 import qualified Data.Text as T
+import qualified Data.Vector as V
 
 renderTemplate :: HashMap Text Value -> Text -> Text
 renderTemplate varTable strTemplate = merge $
@@ -17,6 +18,7 @@ renderTemplate varTable strTemplate = merge $
     (Right res) -> res
   where render :: Parser [Tokens]
         render = many1 $ objectParser
+                     <|> arrayParser
                      <|> identityParser
                      <|> literalParser
 
@@ -34,3 +36,7 @@ renderTemplate varTable strTemplate = merge $
                 (Just x) -> x
                 Nothing  -> T.empty
             _              -> T.empty
+        mergeMap (Array a i) =
+          case H.lookup a varTable of
+            (Just (List l)) -> l V.! i
+            _               -> T.empty

@@ -39,4 +39,5 @@ test-suite spec
                       text >= 0.11,
                       unordered-containers >= 0.2,
                       attoparsec >= 0.10,
+                      vector >= 0.10,
                       hspec >= 1.5

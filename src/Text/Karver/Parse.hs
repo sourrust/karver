@@ -4,7 +4,7 @@ module Text.Karver.Parse
 ( literalParser
 , identityParser
 , objectParser
-, arrayParser
+, listParser
 ) where
 
 import Text.Karver.Types
@@ -14,7 +14,7 @@ import Data.Attoparsec.Text
 literalParser :: Parser Tokens
 literalParser = do
   html <- takeWhile1 (/= '{')
-  return $ Literal html
+  return $ LiteralTok html
 
 surroundParser :: Parser Tokens -> Parser Tokens
 surroundParser tokenParser = do
@@ -29,7 +29,7 @@ identityParser :: Parser Tokens
 identityParser =
   surroundParser $ do
     ident <- takeTill (inClass " }")
-    return $ Identity ident
+    return $ IdentityTok ident
 
 objectParser :: Parser Tokens
 objectParser =
@@ -37,13 +37,13 @@ objectParser =
     obj <- takeTill (inClass " .}")
     char '.'
     key <- takeTill (inClass " }")
-    return $ Object obj key
+    return $ ObjectTok obj key
 
-arrayParser :: Parser Tokens
-arrayParser =
+listParser :: Parser Tokens
+listParser =
   surroundParser $ do
-    arr <- takeTill (inClass " [}")
+    list <- takeTill (inClass " [}")
     char '['
     idx <- decimal
     char ']'
-    return $ Array arr idx
+    return $ ListTok list idx

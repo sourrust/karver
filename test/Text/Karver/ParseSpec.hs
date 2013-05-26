@@ -10,14 +10,14 @@ import Data.Attoparsec.Text (parseOnly)
 import Data.Text (Text, concat, pack)
 import Test.Hspec
 
-literal, ident, object, array :: Text -> Either String Tokens
+literal, ident, object, list :: Text -> Either String Tokens
 literal = parseOnly literalParser
 
 ident = parseOnly identityParser
 
 object = parseOnly objectParser
 
-array = parseOnly arrayParser
+list = parseOnly listParser
 
 isLeft :: Either a b -> Bool
 isLeft (Left _) = True
@@ -35,14 +35,14 @@ spec = do
     it "stops at first {" $ do
       let text     = "a{ should no parse"
           value    = literal text
-          expected = Right $ Literal "a"
+          expected = Right $ LiteralTok "a"
 
       value `shouldBe` expected
 
     it "until the end" $ do
       let fullText = "all this text is here"
           value    = literal fullText
-          expected = Right $ Literal fullText
+          expected = Right $ LiteralTok fullText
 
       value `shouldBe` expected
 
@@ -56,35 +56,35 @@ spec = do
     it "regular identity" $ do
       let regText  = "{{ name }}"
           value    = ident regText
-          expected = Right $ Identity "name"
+          expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "no spaces identity" $ do
       let regText  = "{{name}}"
           value    = ident regText
-          expected = Right $ Identity "name"
+          expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "no space on right identity" $ do
       let rText    = "{{ name}}"
           value    = ident rText
-          expected = Right $ Identity "name"
+          expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "no space on left identity" $ do
       let lText    = "{{name }}"
           value    = ident lText
-          expected = Right $ Identity "name"
+          expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "multiple spaces identity" $ do
       let multiText = "{{     name   }}"
           value     = ident multiText
-          expected  = Right $ Identity "name"
+          expected  = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
@@ -98,31 +98,31 @@ spec = do
     it "regular object" $ do
       let regObj   = "{{ person.name }}"
           value    = object regObj
-          expected = Right $ Object "person" "name"
+          expected = Right $ ObjectTok "person" "name"
 
       value `shouldBe` expected
 
   describe "arrayParser" $ do
     it "no array present" $ do
-      let noArr = "{{ name }}"
-          value = array noArr
+      let noList = "{{ name }}"
+          value  = list noList
 
       value `shouldSatisfy` isLeft
 
     it "regular array" $ do
-      let regArr   = "{{ names[1] }}"
-          value    = array regArr
-          expected = Right $ Array "names" 1
+      let regList  = "{{ names[1] }}"
+          value    = list regList
+          expected = Right $ ListTok "names" 1
 
       value `shouldBe` expected
 
     it "maxBound index array" $ do
       let maxInt   = maxBound
-          regArr   = concat [ "{{ names["
+          regList  = concat [ "{{ names["
                             , (pack $ show maxInt)
                             , "] }}"
                             ]
-          value    = array regArr
-          expected = Right $ Array "names" maxInt
+          value    = list regList
+          expected = Right $ ListTok "names" maxInt
 
       value `shouldBe` expected

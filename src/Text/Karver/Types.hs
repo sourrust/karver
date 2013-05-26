@@ -6,13 +6,13 @@ import Data.Vector
 
 type Key = Text
 
-data Tokens = Literal  Text
-            | Identity Text
-            | Object   Text Key
-            | Array    Text Int
+data Tokens = LiteralTok  Text
+            | IdentityTok Text
+            | ObjectTok   Text Key
+            | ListTok     Text Int
             deriving (Show, Eq)
 
-data Value = String Text
-           | Map    (HashMap Text Text)
+data Value = Literal Text
+           | Object (HashMap Text Text)
            | List   (Vector Text)
            deriving (Show)

@@ -14,29 +14,29 @@ import qualified Data.Vector as V
 renderTemplate :: HashMap Text Value -> Text -> Text
 renderTemplate varTable strTemplate = merge $
   case parseOnly render strTemplate of
-    (Left err)  -> [Literal $ T.pack err]
+    (Left err)  -> [LiteralTok $ T.pack err]
     (Right res) -> res
   where render :: Parser [Tokens]
         render = many1 $ objectParser
-                     <|> arrayParser
+                     <|> listParser
                      <|> identityParser
                      <|> literalParser
 
         merge :: [Tokens] -> Text
         merge = T.concat . map mergeMap
-        mergeMap (Literal x)  = x
-        mergeMap (Identity x) =
+        mergeMap (LiteralTok x)  = x
+        mergeMap (IdentityTok x) =
           case H.lookup x varTable of
-            (Just (String s)) -> s
+            (Just (Literal s)) -> s
             _                 -> T.empty
-        mergeMap (Object i k) =
+        mergeMap (ObjectTok i k) =
           case H.lookup i varTable of
-            (Just (Map m)) ->
+            (Just (Object m)) ->
               case H.lookup k m of
                 (Just x) -> x
                 Nothing  -> T.empty
             _              -> T.empty
-        mergeMap (Array a i) =
+        mergeMap (ListTok a i) =
           case H.lookup a varTable of
             (Just (List l)) -> l V.! i
             _               -> T.empty

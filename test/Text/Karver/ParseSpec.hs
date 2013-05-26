@@ -117,9 +117,9 @@ spec = do
       value `shouldBe` expected
 
     it "maxBound index array" $ do
-      let maxWord  = maxBound
+      let maxInt   = maxBound
           regArr   = concat [ "{{ names["
-                            , (pack $ show maxWord)
+                            , (pack $ show maxInt)
                             , "] }}"
                             ]
           value    = array regArr

@@ -4,7 +4,7 @@ module Text.Karver.Parse
 ( literalParser
 , identityParser
 , objectParser
-, arrayParser
+, listParser
 ) where
 
 import Text.Karver.Types
@@ -39,11 +39,11 @@ objectParser =
     key <- takeTill (inClass " }")
     return $ ObjectTok obj key
 
-arrayParser :: Parser Tokens
-arrayParser =
+listParser :: Parser Tokens
+listParser =
   surroundParser $ do
-    arr <- takeTill (inClass " [}")
+    list <- takeTill (inClass " [}")
     char '['
     idx <- decimal
     char ']'
-    return $ ListTok arr idx
+    return $ ListTok list idx

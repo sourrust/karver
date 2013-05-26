@@ -10,14 +10,14 @@ import Data.Attoparsec.Text (parseOnly)
 import Data.Text (Text, concat, pack)
 import Test.Hspec
 
-literal, ident, object, array :: Text -> Either String Tokens
+literal, ident, object, list :: Text -> Either String Tokens
 literal = parseOnly literalParser
 
 ident = parseOnly identityParser
 
 object = parseOnly objectParser
 
-array = parseOnly arrayParser
+list = parseOnly listParser
 
 isLeft :: Either a b -> Bool
 isLeft (Left _) = True
@@ -104,25 +104,25 @@ spec = do
 
   describe "arrayParser" $ do
     it "no array present" $ do
-      let noArr = "{{ name }}"
-          value = array noArr
+      let noList = "{{ name }}"
+          value  = list noList
 
       value `shouldSatisfy` isLeft
 
     it "regular array" $ do
-      let regArr   = "{{ names[1] }}"
-          value    = array regArr
+      let regList  = "{{ names[1] }}"
+          value    = list regList
           expected = Right $ ListTok "names" 1
 
       value `shouldBe` expected
 
     it "maxBound index array" $ do
       let maxInt   = maxBound
-          regArr   = concat [ "{{ names["
+          regList  = concat [ "{{ names["
                             , (pack $ show maxInt)
                             , "] }}"
                             ]
-          value    = array regArr
+          value    = list regList
           expected = Right $ ListTok "names" maxInt
 
       value `shouldBe` expected

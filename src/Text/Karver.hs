@@ -18,7 +18,7 @@ renderTemplate varTable strTemplate = merge $
     (Right res) -> res
   where render :: Parser [Tokens]
         render = many1 $ objectParser
-                     <|> arrayParser
+                     <|> listParser
                      <|> identityParser
                      <|> literalParser
 

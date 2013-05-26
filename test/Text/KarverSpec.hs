@@ -8,6 +8,7 @@ import Text.Karver.Types
 import Prelude hiding (unlines)
 import Data.HashMap.Strict (fromList)
 import Data.Text (Text, append, unlines)
+import qualified Data.Vector as V
 import Test.Hspec
 
 renderer :: Text -> Text
@@ -17,6 +18,8 @@ renderer = renderTemplate
               , ("ver-control", String "git")
               , ("template",    Map $ fromList
                                   [ ("name", "karver")])
+              , ("libraries",   List $ V.fromList
+                                  ["attoparsec", "hspec"])
               ])
 
 spec :: Spec
@@ -86,5 +89,27 @@ spec = do
       let mixText  = "My {{ template.name }} is your {{ project }}."
           value    = renderer mixText
           expected = "My karver is your karver."
+
+      value `shouldBe` expected
+
+    it "array identity" $ do
+      let arrText  = "karver uses {{ libraries[0] }} for parsing."
+          value    = renderer arrText
+          expected = "karver uses attoparsec for parsing."
+
+      value `shouldBe` expected
+
+    it "mix of array and identity" $ do
+      let arrText  = "{{ project }} uses {{ libraries[1] }} for testing."
+          value    = renderer arrText
+          expected = "karver uses hspec for testing."
+
+      value `shouldBe` expected
+
+    it "mix of array and object" $ do
+      let arrText  = append "{{ template.name }} uses"
+                            " {{ libraries[1] }} for testing."
+          value    = renderer arrText
+          expected = "karver uses hspec for testing."
 
       value `shouldBe` expected

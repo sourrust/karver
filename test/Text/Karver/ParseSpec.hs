@@ -35,14 +35,14 @@ spec = do
     it "stops at first {" $ do
       let text     = "a{ should no parse"
           value    = literal text
-          expected = Right $ Literal "a"
+          expected = Right $ LiteralTok "a"
 
       value `shouldBe` expected
 
     it "until the end" $ do
       let fullText = "all this text is here"
           value    = literal fullText
-          expected = Right $ Literal fullText
+          expected = Right $ LiteralTok fullText
 
       value `shouldBe` expected
 
@@ -56,35 +56,35 @@ spec = do
     it "regular identity" $ do
       let regText  = "{{ name }}"
           value    = ident regText
-          expected = Right $ Identity "name"
+          expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "no spaces identity" $ do
       let regText  = "{{name}}"
           value    = ident regText
-          expected = Right $ Identity "name"
+          expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "no space on right identity" $ do
       let rText    = "{{ name}}"
           value    = ident rText
-          expected = Right $ Identity "name"
+          expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "no space on left identity" $ do
       let lText    = "{{name }}"
           value    = ident lText
-          expected = Right $ Identity "name"
+          expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "multiple spaces identity" $ do
       let multiText = "{{     name   }}"
           value     = ident multiText
-          expected  = Right $ Identity "name"
+          expected  = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
@@ -98,7 +98,7 @@ spec = do
     it "regular object" $ do
       let regObj   = "{{ person.name }}"
           value    = object regObj
-          expected = Right $ Object "person" "name"
+          expected = Right $ ObjectTok "person" "name"
 
       value `shouldBe` expected
 
@@ -112,7 +112,7 @@ spec = do
     it "regular array" $ do
       let regArr   = "{{ names[1] }}"
           value    = array regArr
-          expected = Right $ Array "names" 1
+          expected = Right $ ListTok "names" 1
 
       value `shouldBe` expected
 
@@ -123,6 +123,6 @@ spec = do
                             , "] }}"
                             ]
           value    = array regArr
-          expected = Right $ Array "names" maxInt
+          expected = Right $ ListTok "names" maxInt
 
       value `shouldBe` expected

@@ -13,10 +13,10 @@ import Test.Hspec
 
 renderer :: Text -> Text
 renderer = renderTemplate
-  (fromList $ [ ("project",     String "karver")
-              , ("language",    String "haskell")
-              , ("ver-control", String "git")
-              , ("template",    Map $ fromList
+  (fromList $ [ ("project",     Literal "karver")
+              , ("language",    Literal "haskell")
+              , ("ver-control", Literal "git")
+              , ("template",    Object $ fromList
                                   [ ("name", "karver")])
               , ("libraries",   List $ V.fromList
                                   ["attoparsec", "hspec"])

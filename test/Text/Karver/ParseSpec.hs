@@ -123,6 +123,6 @@ spec = do
                             , "] }}"
                             ]
           value    = array regArr
-          expected = Right $ Array "names" maxWord
+          expected = Right $ Array "names" maxInt
 
       value `shouldBe` expected

@@ -92,21 +92,21 @@ spec = do
 
       value `shouldBe` expected
 
-    it "array identity" $ do
+    it "list identity" $ do
       let arrText  = "karver uses {{ libraries[0] }} for parsing."
           value    = renderer arrText
           expected = "karver uses attoparsec for parsing."
 
       value `shouldBe` expected
 
-    it "mix of array and identity" $ do
+    it "mix of list and identity" $ do
       let arrText  = "{{ project }} uses {{ libraries[1] }} for testing."
           value    = renderer arrText
           expected = "karver uses hspec for testing."
 
       value `shouldBe` expected
 
-    it "mix of array and object" $ do
+    it "mix of list and object" $ do
       let arrText  = append "{{ template.name }} uses"
                             " {{ libraries[1] }} for testing."
           value    = renderer arrText

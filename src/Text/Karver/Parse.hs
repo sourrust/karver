@@ -10,19 +10,20 @@ module Text.Karver.Parse
 import Text.Karver.Types
 
 import Data.Attoparsec.Text
+import Data.Text (Text)
 
 literalParser :: Parser Tokens
 literalParser = do
   html <- takeWhile1 (/= '{')
   return $ LiteralTok html
 
-surroundParser :: Parser Tokens -> Parser Tokens
-surroundParser tokenParser = do
-  string "{{"
+delimiterParser :: Text -> Text -> Parser Tokens -> Parser Tokens
+delimiterParser begin end tokenParser = do
+  string begin
   skipSpace
   tok <- tokenParser
   skipSpace
-  string "}}"
+  string end
   return tok
 
 identityParser :: Parser Tokens

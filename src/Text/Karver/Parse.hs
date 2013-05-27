@@ -26,15 +26,18 @@ delimiterParser begin end tokenParser = do
   string end
   return tok
 
+identityDelimiter :: Parser Tokens -> Parser Tokens
+identityDelimiter = delimiterParser "{{" "}}"
+
 identityParser :: Parser Tokens
 identityParser =
-  surroundParser $ do
+  identityDelimiter $ do
     ident <- takeTill (inClass " }")
     return $ IdentityTok ident
 
 objectParser :: Parser Tokens
 objectParser =
-  surroundParser $ do
+  identityDelimiter $ do
     obj <- takeTill (inClass " .}")
     char '.'
     key <- takeTill (inClass " }")
@@ -42,7 +45,7 @@ objectParser =
 
 listParser :: Parser Tokens
 listParser =
-  surroundParser $ do
+  identityDelimiter $ do
     list <- takeTill (inClass " [}")
     char '['
     idx <- decimal

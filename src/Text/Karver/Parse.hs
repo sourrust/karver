@@ -10,30 +10,36 @@ module Text.Karver.Parse
 import Text.Karver.Types
 
 import Data.Attoparsec.Text
+import Data.Text (Text)
 
 literalParser :: Parser Tokens
 literalParser = do
   html <- takeWhile1 (/= '{')
   return $ LiteralTok html
 
-surroundParser :: Parser Tokens -> Parser Tokens
-surroundParser tokenParser = do
-  string "{{"
+delimiterParser :: Text -> Text -> Parser Tokens -> Parser Tokens
+delimiterParser begin end tokenParser = do
+  string begin
   skipSpace
   tok <- tokenParser
   skipSpace
-  string "}}"
+  string end
   return tok
+
+identityDelimiter, expressionDelimiter :: Parser Tokens -> Parser Tokens
+identityDelimiter = delimiterParser "{{" "}}"
+
+expressionDelimiter = delimiterParser "{%" "%}"
 
 identityParser :: Parser Tokens
 identityParser =
-  surroundParser $ do
+  identityDelimiter $ do
     ident <- takeTill (inClass " }")
     return $ IdentityTok ident
 
 objectParser :: Parser Tokens
 objectParser =
-  surroundParser $ do
+  identityDelimiter $ do
     obj <- takeTill (inClass " .}")
     char '.'
     key <- takeTill (inClass " }")
@@ -41,7 +47,7 @@ objectParser =
 
 listParser :: Parser Tokens
 listParser =
-  surroundParser $ do
+  identityDelimiter $ do
     list <- takeTill (inClass " [}")
     char '['
     idx <- decimal

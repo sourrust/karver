@@ -26,8 +26,10 @@ delimiterParser begin end tokenParser = do
   string end
   return tok
 
-identityDelimiter :: Parser Tokens -> Parser Tokens
+identityDelimiter, expressionDelimiter :: Parser Tokens -> Parser Tokens
 identityDelimiter = delimiterParser "{{" "}}"
+
+expressionDelimiter = delimiterParser "{%" "%}"
 
 identityParser :: Parser Tokens
 identityParser =

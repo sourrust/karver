@@ -10,17 +10,13 @@ import Data.Attoparsec.Text (parseOnly)
 import Data.Text (Text, concat, pack, unlines)
 import Test.Hspec
 
-literal, ident, object, list, condition :: Text -> Either String Tokens
+literal, variable, condition :: Text -> Either String Tokens
 literal   = parseOnly literalParser
-ident     = parseOnly identityParser
-object    = parseOnly objectParser
-list      = parseOnly listParser
+variable  = parseOnly variableParser
 condition = parseOnly conditionParser
 
-noDemIdent, noDemObject, noDemList :: Text -> Either String Tokens
-noDemIdent  = parseOnly identityParser'
-noDemObject = parseOnly objectParser'
-noDemList   = parseOnly listParser'
+noDemVariable :: Text -> Either String Tokens
+noDemVariable = parseOnly variableParser'
 
 isLeft :: Either a b -> Bool
 isLeft (Left _) = True

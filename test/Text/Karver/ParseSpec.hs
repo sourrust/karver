@@ -48,41 +48,41 @@ spec = do
   describe "identityParser" $ do
     it "no input" $ do
       let noText   = ""
-          value    = ident noText
+          value    = variable noText
 
       value `shouldSatisfy` isLeft
 
     it "regular identity" $ do
       let regText  = "{{ name }}"
-          value    = ident regText
+          value    = variable regText
           expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "no spaces identity" $ do
       let regText  = "{{name}}"
-          value    = ident regText
+          value    = variable regText
           expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "no space on right identity" $ do
       let rText    = "{{ name}}"
-          value    = ident rText
+          value    = variable rText
           expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "no space on left identity" $ do
       let lText    = "{{name }}"
-          value    = ident lText
+          value    = variable lText
           expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "multiple spaces identity" $ do
       let multiText = "{{     name   }}"
-          value     = ident multiText
+          value     = variable multiText
           expected  = Right $ IdentityTok "name"
 
       value `shouldBe` expected
@@ -90,13 +90,13 @@ spec = do
   describe "objectParser" $ do
     it "no object present" $ do
       let noObj = "{{ name }}"
-          value = object noObj
+          value = variable noObj
 
       value `shouldSatisfy` isLeft
 
     it "regular object" $ do
       let regObj   = "{{ person.name }}"
-          value    = object regObj
+          value    = variable regObj
           expected = Right $ ObjectTok "person" "name"
 
       value `shouldBe` expected
@@ -104,13 +104,13 @@ spec = do
   describe "arrayParser" $ do
     it "no array present" $ do
       let noList = "{{ name }}"
-          value  = list noList
+          value  = variable noList
 
       value `shouldSatisfy` isLeft
 
     it "regular array" $ do
       let regList  = "{{ names[1] }}"
-          value    = list regList
+          value    = variable regList
           expected = Right $ ListTok "names" 1
 
       value `shouldBe` expected
@@ -121,7 +121,7 @@ spec = do
                             , (pack $ show maxInt)
                             , "] }}"
                             ]
-          value    = list regList
+          value    = variable regList
           expected = Right $ ListTok "names" maxInt
 
       value `shouldBe` expected
@@ -145,19 +145,19 @@ spec = do
 
   describe "no delimiter" $ do
     it "identity" $ do
-      let value    = noDemIdent "name"
+      let value    = noDemVariable "name"
           expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
     it "object" $ do
-      let value    = noDemObject "project.name"
+      let value    = noDemVariable "project.name"
           expected = Right $ ObjectTok "project" "name"
 
       value `shouldBe` expected
 
     it "list" $ do
-      let value    = noDemList "names[4]"
+      let value    = noDemVariable "names[4]"
           expected = Right $ ListTok "names" 4
 
       value `shouldBe` expected

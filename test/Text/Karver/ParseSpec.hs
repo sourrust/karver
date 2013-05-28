@@ -88,12 +88,6 @@ spec = do
       value `shouldBe` expected
 
   describe "objectParser" $ do
-    it "no object present" $ do
-      let noObj = "{{ name }}"
-          value = variable noObj
-
-      value `shouldSatisfy` isLeft
-
     it "regular object" $ do
       let regObj   = "{{ person.name }}"
           value    = variable regObj
@@ -102,12 +96,6 @@ spec = do
       value `shouldBe` expected
 
   describe "arrayParser" $ do
-    it "no array present" $ do
-      let noList = "{{ name }}"
-          value  = variable noList
-
-      value `shouldSatisfy` isLeft
-
     it "regular array" $ do
       let regList  = "{{ names[1] }}"
           value    = variable regList

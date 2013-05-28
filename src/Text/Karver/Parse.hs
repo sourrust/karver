@@ -3,8 +3,11 @@
 module Text.Karver.Parse
 ( literalParser
 , identityParser
+, identityParser'
 , objectParser
+, objectParser'
 , listParser
+, listParser'
 , conditionParser
 ) where
 
@@ -37,8 +40,10 @@ identityParser_ fn = fn $ do
   ident <- takeTill (inClass " }")
   return $ IdentityTok ident
 
-identityParser :: Parser Tokens
-identityParser = identityParser_ identityDelimiter
+identityParser, identityParser' :: Parser Tokens
+
+identityParser  = identityParser_ identityDelimiter
+identityParser' = identityParser_ id
 
 objectParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
 objectParser_ fn = fn $ do
@@ -47,8 +52,10 @@ objectParser_ fn = fn $ do
   key <- takeTill (inClass " }")
   return $ ObjectTok obj key
 
-objectParser :: Parser Tokens
-objectParser = objectParser_ identityDelimiter
+objectParser, objectParser' :: Parser Tokens
+
+objectParser  = objectParser_ identityDelimiter
+objectParser' = objectParser_ id
 
 listParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
 listParser_ fn = fn $ do
@@ -58,8 +65,10 @@ listParser_ fn = fn $ do
   char ']'
   return $ ListTok list idx
 
-listParser :: Parser Tokens
-listParser = listParser_ identityDelimiter
+listParser, listParser' :: Parser Tokens
+
+listParser  = listParser_ identityDelimiter
+listParser' = listParser_ id
 
 conditionParser :: Parser Tokens
 conditionParser = do

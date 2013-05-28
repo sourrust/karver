@@ -2,12 +2,6 @@
 
 module Text.Karver.Parse
 ( literalParser
-, identityParser
-, identityParser'
-, objectParser
-, objectParser'
-, listParser
-, listParser'
 , variableParser
 , variableParser'
 , conditionParser
@@ -60,41 +54,6 @@ variableParser, variableParser' :: Parser Tokens
 
 variableParser  = variableParser_ identityDelimiter
 variableParser' = variableParser_ id
-
-identityParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
-identityParser_ fn = fn $ do
-  ident <- takeTill (inClass " }")
-  return $ IdentityTok ident
-
-identityParser, identityParser' :: Parser Tokens
-
-identityParser  = identityParser_ identityDelimiter
-identityParser' = identityParser_ id
-
-objectParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
-objectParser_ fn = fn $ do
-  obj <- takeTill (inClass " .}")
-  char '.'
-  key <- takeTill (inClass " }")
-  return $ ObjectTok obj key
-
-objectParser, objectParser' :: Parser Tokens
-
-objectParser  = objectParser_ identityDelimiter
-objectParser' = objectParser_ id
-
-listParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
-listParser_ fn = fn $ do
-  list <- takeTill (inClass " [}")
-  char '['
-  idx <- decimal
-  char ']'
-  return $ ListTok list idx
-
-listParser, listParser' :: Parser Tokens
-
-listParser  = listParser_ identityDelimiter
-listParser' = listParser_ id
 
 conditionParser :: Parser Tokens
 conditionParser = do

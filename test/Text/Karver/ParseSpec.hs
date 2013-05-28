@@ -5,12 +5,12 @@ module Text.Karver.ParseSpec (spec) where
 import Text.Karver.Parse
 import Text.Karver.Types
 
-import Prelude hiding (concat)
+import Prelude hiding (concat, unlines)
 import Data.Attoparsec.Text (parseOnly)
-import Data.Text (Text, concat, pack)
+import Data.Text (Text, concat, pack, unlines)
 import Test.Hspec
 
-literal, ident, object, list :: Text -> Either String Tokens
+literal, ident, object, list, condition :: Text -> Either String Tokens
 literal = parseOnly literalParser
 
 ident = parseOnly identityParser
@@ -18,6 +18,8 @@ ident = parseOnly identityParser
 object = parseOnly objectParser
 
 list = parseOnly listParser
+
+condition = parseOnly conditionParser
 
 isLeft :: Either a b -> Bool
 isLeft (Left _) = True
@@ -124,5 +126,22 @@ spec = do
                             ]
           value    = list regList
           expected = Right $ ListTok "names" maxInt
+
+      value `shouldBe` expected
+
+    it "single line if statement" $ do
+      let ifText    = "{% if title %}{{ title }}{% endif %}"
+          value     = condition ifText
+          expected  = Right $ ConditionTok "title" "{{ title }}" ""
+
+      value `shouldBe` expected
+
+    it "multi line if statement" $ do
+      let ifText    = unlines [ "{% if title %}"
+                              , "  {{ title }}"
+                              , "{% endif %}"
+                              ]
+          value     = condition ifText
+          expected  = Right $ ConditionTok "title" "{{ title }}\n" ""
 
       value `shouldBe` expected

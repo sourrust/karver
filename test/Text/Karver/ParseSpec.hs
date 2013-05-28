@@ -11,14 +11,10 @@ import Data.Text (Text, concat, pack, unlines)
 import Test.Hspec
 
 literal, ident, object, list, condition :: Text -> Either String Tokens
-literal = parseOnly literalParser
-
-ident = parseOnly identityParser
-
-object = parseOnly objectParser
-
-list = parseOnly listParser
-
+literal   = parseOnly literalParser
+ident     = parseOnly identityParser
+object    = parseOnly objectParser
+list      = parseOnly listParser
 condition = parseOnly conditionParser
 
 isLeft :: Either a b -> Bool

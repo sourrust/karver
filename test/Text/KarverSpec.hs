@@ -5,9 +5,9 @@ module Text.KarverSpec (spec) where
 import Text.Karver
 import Text.Karver.Types
 
-import Prelude hiding (unlines)
+import Prelude hiding (unlines, concat)
 import Data.HashMap.Strict (fromList)
-import Data.Text (Text, append, unlines)
+import Data.Text (Text, append, unlines, concat)
 import qualified Data.Vector as V
 import Test.Hspec
 
@@ -111,5 +111,22 @@ spec = do
                             " {{ libraries[1] }} for testing."
           value    = renderer arrText
           expected = "karver uses hspec for testing."
+
+      value `shouldBe` expected
+
+    it "true evaluated if" $ do
+      let trueText = "{% if project %}{{ project }}{% endif %} is true"
+          value    = renderer trueText
+          expected = "karver is true"
+
+      value `shouldBe` expected
+
+    it "false evaluated if" $ do
+      let falseText = concat [ "{% if closed %}"
+                             , "  karver is closed source"
+                             , "{% endif %}"
+                             ]
+          value     = renderer falseText
+          expected  = ""
 
       value `shouldBe` expected

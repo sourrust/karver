@@ -2,9 +2,8 @@
 
 module Text.Karver.Parse
 ( literalParser
-, identityParser
-, objectParser
-, listParser
+, variableParser
+, variableParser'
 , conditionParser
 ) where
 
@@ -32,28 +31,29 @@ identityDelimiter = delimiterParser "{{" "}}"
 
 expressionDelimiter = delimiterParser "{%" "%}"
 
-identityParser :: Parser Tokens
-identityParser =
-  identityDelimiter $ do
-    ident <- takeTill (inClass " }")
-    return $ IdentityTok ident
+variableParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
+variableParser_ fn = fn $ do
+  ident <- takeTill (inClass " .[}")
+  peek <- peekChar
+  case peek of
+    (Just '[') -> do
+      char '['
+      idx <- decimal
+      char ']'
+      return $ ListTok ident idx
+    (Just '.') -> do
+      char '.'
+      key <- takeTill (inClass " }")
+      return $ ObjectTok ident key
+    (Just ' ') -> return $ IdentityTok ident
+    (Just '}') -> return $ IdentityTok ident
+    Nothing    -> return $ IdentityTok ident
+    _          -> fail "variableParser_: failed with no token to apply."
 
-objectParser :: Parser Tokens
-objectParser =
-  identityDelimiter $ do
-    obj <- takeTill (inClass " .}")
-    char '.'
-    key <- takeTill (inClass " }")
-    return $ ObjectTok obj key
+variableParser, variableParser' :: Parser Tokens
 
-listParser :: Parser Tokens
-listParser =
-  identityDelimiter $ do
-    list <- takeTill (inClass " [}")
-    char '['
-    idx <- decimal
-    char ']'
-    return $ ListTok list idx
+variableParser  = variableParser_ identityDelimiter
+variableParser' = variableParser_ id
 
 conditionParser :: Parser Tokens
 conditionParser = do

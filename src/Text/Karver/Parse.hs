@@ -32,28 +32,34 @@ identityDelimiter = delimiterParser "{{" "}}"
 
 expressionDelimiter = delimiterParser "{%" "%}"
 
+identityParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
+identityParser_ fn = fn $ do
+  ident <- takeTill (inClass " }")
+  return $ IdentityTok ident
+
 identityParser :: Parser Tokens
-identityParser =
-  identityDelimiter $ do
-    ident <- takeTill (inClass " }")
-    return $ IdentityTok ident
+identityParser = identityParser_ identityDelimiter
+
+objectParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
+objectParser_ fn = fn $ do
+  obj <- takeTill (inClass " .}")
+  char '.'
+  key <- takeTill (inClass " }")
+  return $ ObjectTok obj key
 
 objectParser :: Parser Tokens
-objectParser =
-  identityDelimiter $ do
-    obj <- takeTill (inClass " .}")
-    char '.'
-    key <- takeTill (inClass " }")
-    return $ ObjectTok obj key
+objectParser = objectParser_ identityDelimiter
+
+listParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
+listParser_ fn = fn $ do
+  list <- takeTill (inClass " [}")
+  char '['
+  idx <- decimal
+  char ']'
+  return $ ListTok list idx
 
 listParser :: Parser Tokens
-listParser =
-  identityDelimiter $ do
-    list <- takeTill (inClass " [}")
-    char '['
-    idx <- decimal
-    char ']'
-    return $ ListTok list idx
+listParser = listParser_ identityDelimiter
 
 conditionParser :: Parser Tokens
 conditionParser = do

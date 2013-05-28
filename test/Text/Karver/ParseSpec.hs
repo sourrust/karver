@@ -17,6 +17,11 @@ object    = parseOnly objectParser
 list      = parseOnly listParser
 condition = parseOnly conditionParser
 
+noDemIdent, noDemObject, noDemList :: Text -> Either String Tokens
+noDemIdent  = parseOnly identityParser'
+noDemObject = parseOnly objectParser'
+noDemList   = parseOnly listParser'
+
 isLeft :: Either a b -> Bool
 isLeft (Left _) = True
 isLeft _        = False
@@ -139,5 +144,24 @@ spec = do
                               ]
           value     = condition ifText
           expected  = Right $ ConditionTok "title" "{{ title }}\n" ""
+
+      value `shouldBe` expected
+
+  describe "no delimiter" $ do
+    it "identity" $ do
+      let value    = noDemIdent "name"
+          expected = Right $ IdentityTok "name"
+
+      value `shouldBe` expected
+
+    it "object" $ do
+      let value    = noDemObject "project.name"
+          expected = Right $ ObjectTok "project" "name"
+
+      value `shouldBe` expected
+
+    it "list" $ do
+      let value    = noDemList "names[4]"
+          expected = Right $ ListTok "names" 4
 
       value `shouldBe` expected

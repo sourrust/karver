@@ -130,3 +130,25 @@ spec = do
           expected  = ""
 
       value `shouldBe` expected
+
+    it "check if object element exists" $ do
+      let elemText = concat [ "{% if template.name %}"
+                            , "  {{ template.name }} is the template."
+                            , "{% endif %}"
+                            ]
+          value    = renderer elemText
+          expected = "karver is the template."
+
+      value `shouldBe` expected
+
+    it "check if list element exists" $ do
+      let elemText = concat [ "{% if libraries[1] %}"
+                            , concat [ "  {{ libraries[1] }} makes"
+                                     , " testing enjoyable!"
+                                     ]
+                            , "{% endif %}"
+                            ]
+          value    = renderer elemText
+          expected = "hspec makes testing enjoyable!"
+
+      value `shouldBe` expected

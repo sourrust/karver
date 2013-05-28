@@ -21,6 +21,12 @@ renderTemplate varTable strTemplate = merge $
                      <|> literalParser
                      <|> conditionParser
 
+        hasVariable :: Text -> Bool
+        hasVariable txt =
+          case parseOnly variableParser' txt of
+            (Right res) -> if T.null $ mergeMap res then False else True
+            _           -> False
+
         merge :: [Tokens] -> Text
         merge = T.concat . map mergeMap
         mergeMap (LiteralTok x)  = x
@@ -40,9 +46,8 @@ renderTemplate varTable strTemplate = merge $
             (Just (List l)) -> l V.! i
             _               -> T.empty
         mergeMap (ConditionTok c t f) =
-          case H.lookup c varTable of
-            (Just _) -> merge $
-              case parseOnly render t of
-                (Left err)  -> [LiteralTok $ T.pack err]
-                (Right res) -> res
-            _        -> f
+          if hasVariable c then merge $
+            case parseOnly render t of
+              (Left err)  -> [LiteralTok $ T.pack err]
+              (Right res) -> res
+            else f

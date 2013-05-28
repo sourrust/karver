@@ -5,12 +5,13 @@ module Text.Karver.Parse
 , identityParser
 , objectParser
 , listParser
+, conditionParser
 ) where
 
 import Text.Karver.Types
 
 import Data.Attoparsec.Text
-import Data.Text (Text)
+import Data.Text (Text, empty, pack)
 
 literalParser :: Parser Tokens
 literalParser = do
@@ -53,3 +54,14 @@ listParser =
     idx <- decimal
     char ']'
     return $ ListTok list idx
+
+conditionParser :: Parser Tokens
+conditionParser = do
+  (LiteralTok logic) <- expressionDelimiter $ do
+    string "if"
+    skipSpace
+    condition <- takeTill (inClass " %")
+    return $ LiteralTok condition
+  skipSpace
+  ifbody <- manyTill anyChar (try $ string "{% endif %}")
+  return $ ConditionTok logic (pack ifbody) empty

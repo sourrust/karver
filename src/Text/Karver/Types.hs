@@ -6,10 +6,11 @@ import Data.Vector
 
 type Key = Text
 
-data Tokens = LiteralTok  Text
-            | IdentityTok Text
-            | ObjectTok   Text Key
-            | ListTok     Text Int
+data Tokens = LiteralTok   Text
+            | IdentityTok  Text
+            | ObjectTok    Text Key
+            | ListTok      Text Int
+            | ConditionTok Text Text Text
             deriving (Show, Eq)
 
 data Value = Literal Text

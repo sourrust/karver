@@ -17,16 +17,16 @@ literalParser = do
   html <- takeWhile1 (/= '{')
   return $ LiteralTok html
 
-delimiterParser :: Text -> Text -> Parser Tokens -> Parser Tokens
-delimiterParser begin end tokenParser = do
+delimiterParser :: Text -> Text -> Parser a -> Parser a
+delimiterParser begin end parseFunc = do
   string begin
   skipSpace
-  tok <- tokenParser
+  val <- parseFunc
   skipSpace
   string end
-  return tok
+  return val
 
-identityDelimiter, expressionDelimiter :: Parser Tokens -> Parser Tokens
+identityDelimiter, expressionDelimiter :: Parser a -> Parser a
 identityDelimiter = delimiterParser "{{" "}}"
 
 expressionDelimiter = delimiterParser "{%" "%}"

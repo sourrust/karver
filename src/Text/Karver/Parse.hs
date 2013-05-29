@@ -63,5 +63,5 @@ conditionParser = do
     condition <- takeTill (inClass " %")
     return $ LiteralTok condition
   skipSpace
-  ifbody <- manyTill anyChar (try $ string "{% endif %}")
+  ifbody <- manyTill anyChar (try . expressionDelimiter $ string "endif")
   return $ ConditionTok logic (pack ifbody) empty

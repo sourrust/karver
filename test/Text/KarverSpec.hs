@@ -152,3 +152,27 @@ spec = do
           expected = "hspec makes testing enjoyable!"
 
       value `shouldBe` expected
+
+    it "false evaluated if else" $ do
+      let falseText = concat [ "{% if closed %}"
+                             , "  karver is closed source"
+                             , "{% else %}"
+                             ,  " karver is open source"
+                             , "{% endif %}"
+                             ]
+          value     = renderer falseText
+          expected  = "karver is open source"
+
+      value `shouldBe` expected
+
+    it "false evaluated if else, for objects" $ do
+      let elemText = concat [ "{% if template.license %}"
+                            , "  {{ template.license }} is the license."
+                            , "{% else %}"
+                            , "  BSD3 is the license."
+                            , "{% endif %}"
+                            ]
+          value    = renderer elemText
+          expected = "BSD3 is the license."
+
+      value `shouldBe` expected

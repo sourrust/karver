@@ -11,22 +11,23 @@ import Text.Karver.Types
 
 import Data.Attoparsec.Text
 import Data.Text (Text, empty, pack)
+import Control.Applicative ((<|>), (<$>), (*>))
 
 literalParser :: Parser Tokens
 literalParser = do
   html <- takeWhile1 (/= '{')
   return $ LiteralTok html
 
-delimiterParser :: Text -> Text -> Parser Tokens -> Parser Tokens
-delimiterParser begin end tokenParser = do
+delimiterParser :: Text -> Text -> Parser a -> Parser a
+delimiterParser begin end parseFunc = do
   string begin
   skipSpace
-  tok <- tokenParser
+  val <- parseFunc
   skipSpace
   string end
-  return tok
+  return val
 
-identityDelimiter, expressionDelimiter :: Parser Tokens -> Parser Tokens
+identityDelimiter, expressionDelimiter :: Parser a -> Parser a
 identityDelimiter = delimiterParser "{{" "}}"
 
 expressionDelimiter = delimiterParser "{%" "%}"
@@ -62,6 +63,12 @@ conditionParser = do
     skipSpace
     condition <- takeTill (inClass " %")
     return $ LiteralTok condition
-  skipSpace
-  ifbody <- manyTill anyChar (try $ string "{% endif %}")
-  return $ ConditionTok logic (pack ifbody) empty
+  let anyTill   = manyTill anyChar
+      ifparse   = skipSpace *> anyTill (expressionDelimiter
+                                      $ string "endif"
+                                    <|> string "else")
+      elseparse = skipSpace *> anyTill (expressionDelimiter
+                                      $ string "endif")
+  ifbody <- pack <$> ifparse
+  elsebody <- option empty (pack <$> elseparse)
+  return $ ConditionTok logic ifbody elsebody

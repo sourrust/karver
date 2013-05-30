@@ -114,6 +114,7 @@ spec = do
 
       value `shouldBe` expected
 
+  describe "conditionParser" $ do
     it "single line if statement" $ do
       let ifText    = "{% if title %}{{ title }}{% endif %}"
           value     = condition ifText
@@ -128,6 +129,27 @@ spec = do
                               ]
           value     = condition ifText
           expected  = Right $ ConditionTok "title" "{{ title }}\n" ""
+
+      value `shouldBe` expected
+
+    it "single line if else statement" $ do
+      let ifelse   = concat [ "{% if title %}{{ title }}{% else %}"
+                            , "no title{% endif %}"
+                            ]
+          value    = condition ifelse
+          expected = Right $ ConditionTok "title" "{{ title }}" "no title"
+
+      value `shouldBe` expected
+
+    it "multi line if else statement" $ do
+      let ifText    = unlines [ "{% if title %}"
+                              , "  {{ title }}"
+                              , "{% else %}"
+                              , "  title"
+                              , "{% endif %}"
+                              ]
+          value     = condition ifText
+          expected  = Right $ ConditionTok "title" "{{ title }}\n" "title\n"
 
       value `shouldBe` expected
 

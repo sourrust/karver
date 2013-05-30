@@ -12,11 +12,16 @@ import qualified Data.Text as T
 import qualified Data.Vector as V
 
 renderTemplate :: HashMap Text Value -> Text -> Text
-renderTemplate varTable strTemplate = merge $
-  case parseOnly render strTemplate of
-    (Left err)  -> [LiteralTok $ T.pack err]
-    (Right res) -> res
-  where render :: Parser [Tokens]
+renderTemplate varTable = encode
+  where encode :: Text -> Text
+        encode tlp
+          | T.null tlp = tlp
+          | otherwise  = merge $
+              case parseOnly render tlp of
+                (Left err)  -> [LiteralTok $ T.pack err]
+                (Right res) -> res
+
+        render :: Parser [Tokens]
         render = many1 $ variableParser
                      <|> literalParser
                      <|> conditionParser
@@ -46,8 +51,6 @@ renderTemplate varTable strTemplate = merge $
             (Just (List l)) -> l V.! i
             _               -> T.empty
         mergeMap (ConditionTok c t f) =
-          if hasVariable c then merge $
-            case parseOnly render t of
-              (Left err)  -> [LiteralTok $ T.pack err]
-              (Right res) -> res
-            else f
+          if hasVariable c
+            then encode t
+            else encode f

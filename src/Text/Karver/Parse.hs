@@ -58,11 +58,11 @@ variableParser' = variableParser_ id
 
 conditionParser :: Parser Tokens
 conditionParser = do
-  (LiteralTok logic) <- expressionDelimiter $ do
+  logic <- expressionDelimiter $ do
     string "if"
     skipSpace
     condition <- takeTill (inClass " %")
-    return $ LiteralTok condition
+    return condition
   let anyTill   = manyTill anyChar
       ifparse   = skipSpace *> anyTill (expressionDelimiter
                                       $ string "endif"

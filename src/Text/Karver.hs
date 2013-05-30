@@ -12,10 +12,7 @@ import qualified Data.Text as T
 import qualified Data.Vector as V
 
 renderTemplate :: HashMap Text Value -> Text -> Text
-renderTemplate varTable strTemplate = merge $
-  case parseOnly render strTemplate of
-    (Left err)  -> [LiteralTok $ T.pack err]
-    (Right res) -> res
+renderTemplate varTable = encode
   where encode :: Text -> Text
         encode tlp
           | T.null tlp = tlp

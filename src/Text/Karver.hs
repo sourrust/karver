@@ -16,7 +16,15 @@ renderTemplate varTable strTemplate = merge $
   case parseOnly render strTemplate of
     (Left err)  -> [LiteralTok $ T.pack err]
     (Right res) -> res
-  where render :: Parser [Tokens]
+  where encode :: Text -> Text
+        encode tlp
+          | T.null tlp = tlp
+          | otherwise  = merge $
+              case parseOnly render tlp of
+                (Left err)  -> [LiteralTok $ T.pack err]
+                (Right res) -> res
+
+        render :: Parser [Tokens]
         render = many1 $ variableParser
                      <|> literalParser
                      <|> conditionParser

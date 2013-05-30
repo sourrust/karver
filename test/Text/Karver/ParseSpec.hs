@@ -114,6 +114,7 @@ spec = do
 
       value `shouldBe` expected
 
+  describe "conditionParser" $ do
     it "single line if statement" $ do
       let ifText    = "{% if title %}{{ title }}{% endif %}"
           value     = condition ifText

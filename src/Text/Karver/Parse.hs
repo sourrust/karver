@@ -11,6 +11,7 @@ import Text.Karver.Types
 
 import Data.Attoparsec.Text
 import Data.Text (Text, empty, pack)
+import Control.Applicative ((<|>), (<$>), (*>))
 
 literalParser :: Parser Tokens
 literalParser = do
@@ -62,6 +63,12 @@ conditionParser = do
     skipSpace
     condition <- takeTill (inClass " %")
     return $ LiteralTok condition
-  skipSpace
-  ifbody <- manyTill anyChar (try . expressionDelimiter $ string "endif")
-  return $ ConditionTok logic (pack ifbody) empty
+  let anyTill   = manyTill anyChar
+      ifparse   = skipSpace *> anyTill (expressionDelimiter
+                                      $ string "endif"
+                                    <|> string "else")
+      elseparse = skipSpace *> anyTill (expressionDelimiter
+                                      $ string "endif")
+  ifbody <- pack <$> ifparse
+  elsebody <- option empty (pack <$> elseparse)
+  return $ ConditionTok logic ifbody elsebody

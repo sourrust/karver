@@ -51,8 +51,6 @@ renderTemplate varTable = encode
             (Just (List l)) -> l V.! i
             _               -> T.empty
         mergeMap (ConditionTok c t f) =
-          if hasVariable c then merge $
-            case parseOnly render t of
-              (Left err)  -> [LiteralTok $ T.pack err]
-              (Right res) -> res
-            else f
+          if hasVariable c
+            then encode t
+            else encode f

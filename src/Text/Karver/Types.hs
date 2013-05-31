@@ -11,6 +11,7 @@ data Tokens = LiteralTok   Text
             | ObjectTok    Text Key
             | ListTok      Text Int
             | ConditionTok Text Text Text
+            | LoopTok      Text Text Text
             deriving (Show, Eq)
 
 data Value = Literal Text

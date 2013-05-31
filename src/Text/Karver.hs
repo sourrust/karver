@@ -25,32 +25,47 @@ renderTemplate varTable = encode
         render = many1 $ variableParser
                      <|> literalParser
                      <|> conditionParser
+                     <|> loopParser
 
         hasVariable :: Text -> Bool
         hasVariable txt =
           case parseOnly variableParser' txt of
-            (Right res) -> if T.null $ mergeMap res then False else True
+            (Right res) -> if T.null $ mergeMap varTable res
+                             then False
+                             else True
             _           -> False
 
         merge :: [Tokens] -> Text
-        merge = T.concat . map mergeMap
-        mergeMap (LiteralTok x)  = x
-        mergeMap (IdentityTok x) =
-          case H.lookup x varTable of
+        merge = T.concat . map (mergeMap varTable)
+        mergeMap _ (LiteralTok x)       = x
+        mergeMap vTable (IdentityTok x) =
+          case H.lookup x vTable of
             (Just (Literal s)) -> s
             _                 -> T.empty
-        mergeMap (ObjectTok i k) =
-          case H.lookup i varTable of
+        mergeMap vTable (ObjectTok i k) =
+          case H.lookup i vTable of
             (Just (Object m)) ->
               case H.lookup k m of
                 (Just x) -> x
                 Nothing  -> T.empty
             _              -> T.empty
-        mergeMap (ListTok a i) =
-          case H.lookup a varTable of
+        mergeMap vTable (ListTok a i) =
+          case H.lookup a vTable of
             (Just (List l)) -> l V.! i
             _               -> T.empty
-        mergeMap (ConditionTok c t f) =
+        mergeMap _ (ConditionTok c t f) =
           if hasVariable c
             then encode t
             else encode f
+        mergeMap vTable (LoopTok a v b) =
+          case H.lookup a vTable of
+            (Just (List l)) ->
+              let toks = case parseOnly render b of
+                           (Left _)  -> []
+                           (Right res) -> res
+                  mapVars x = let x' = Literal x
+                              in map (mergeMap (H.singleton v x')) toks
+              in if null toks
+                   then T.empty
+                   else T.concat . V.toList $ V.map (T.concat . mapVars) l
+            _               -> T.empty

@@ -10,10 +10,11 @@ import Data.Attoparsec.Text (parseOnly)
 import Data.Text (Text, concat, pack, unlines)
 import Test.Hspec
 
-literal, variable, condition :: Text -> Either String Tokens
+literal, variable, condition, loop :: Text -> Either String Tokens
 literal   = parseOnly literalParser
 variable  = parseOnly variableParser
 condition = parseOnly conditionParser
+loop      = parseOnly loopParser
 
 noDemVariable :: Text -> Either String Tokens
 noDemVariable = parseOnly variableParser'
@@ -150,6 +151,27 @@ spec = do
                               ]
           value     = condition ifText
           expected  = Right $ ConditionTok "title" "{{ title }}\n" "title\n"
+
+      value `shouldBe` expected
+
+  describe "loopParser" $ do
+    it "single line for loop" $ do
+      let loopText = concat [ "{% for item in items %}"
+                            , "  {{ item }}"
+                            , "{% endfor %}"
+                            ]
+          value    = loop loopText
+          expected = Right $ LoopTok "items" "item" "{{ item }}"
+
+      value `shouldBe` expected
+
+    it "multi line for loop" $ do
+      let loopText = unlines [ "{% for item in items %}"
+                             , "  {{ item }}"
+                             , "{% endfor %}"
+                             ]
+          value    = loop loopText
+          expected = Right $ LoopTok "items" "item" "{{ item }}\n"
 
       value `shouldBe` expected
 

@@ -5,6 +5,7 @@ module Text.Karver.Parse
 , variableParser
 , variableParser'
 , conditionParser
+, loopParser
 ) where
 
 import Text.Karver.Types
@@ -72,3 +73,18 @@ conditionParser = do
   ifbody <- pack <$> ifparse
   elsebody <- option empty (pack <$> elseparse)
   return $ ConditionTok logic ifbody elsebody
+
+loopParser :: Parser Tokens
+loopParser = do
+  (arr, var) <- expressionDelimiter $ do
+    string "for"
+    skipSpace
+    varName <- takeTill (== ' ')
+    skipSpace
+    string "in"
+    skipSpace
+    arrName <- takeTill (inClass " %")
+    return (arrName, varName)
+  skipSpace
+  loopbody <- manyTill anyChar (expressionDelimiter $ string "endfor")
+  return $ LoopTok arr var $ pack loopbody

@@ -176,3 +176,28 @@ spec = do
           expected = "BSD3 is the license."
 
       value `shouldBe` expected
+
+    it "loop over an array, single variable #1" $ do
+      let loopText = concat [ "Some libraries used: "
+                            , "{% for library in libraries %}"
+                            , "  {{ library }} "
+                            , "{% endfor %}."
+                            ]
+          value    = renderer loopText
+          expected = "Some libraries used: attoparsec hspec ."
+
+      value `shouldBe` expected
+
+    it "loop over an array, single variable #2" $ do
+      let loopText = unlines [ "Some libraries used:"
+                             , "{% for library in libraries %}"
+                             , "  * {{ library }}"
+                             , "{% endfor %}"
+                             ]
+          value    = renderer loopText
+          expected = unlines [ "Some libraries used:"
+                             , "* attoparsec"
+                             , "* hspec\n"
+                             ]
+
+      value `shouldBe` expected

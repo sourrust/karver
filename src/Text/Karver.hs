@@ -25,6 +25,7 @@ renderTemplate varTable = encode
         render = many1 $ variableParser
                      <|> literalParser
                      <|> conditionParser
+                     <|> loopParser
 
         hasVariable :: Text -> Bool
         hasVariable txt =
@@ -56,3 +57,15 @@ renderTemplate varTable = encode
           if hasVariable c
             then encode t
             else encode f
+        mergeMap vTable (LoopTok a v b) =
+          case H.lookup a vTable of
+            (Just (List l)) ->
+              let toks = case parseOnly render b of
+                           (Left _)  -> []
+                           (Right res) -> res
+                  mapVars x = let x' = Literal x
+                              in map (mergeMap (H.singleton v x')) toks
+              in if null toks
+                   then T.empty
+                   else T.concat . V.toList $ V.map (T.concat . mapVars) l
+            _               -> T.empty

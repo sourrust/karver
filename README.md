@@ -98,7 +98,30 @@ computer and you didn't break any of the other tests.
 
 Simple as that.
 
+## Getting Started
+
+```bash
+git clone git://github.com/sourrust/karver.git
+cd karver
+cabal configure --enable-tests
+```
+
+If the configure set fails you are going to want to install the missing
+packages and try again. Karver is built on the [latest Haskell
+Platform][5] and a few other dependencies.
+
+```bash
+cabal update
+cabal install attoparsec \
+              hspec \
+              unordered-containers
+```
+
+And you're pretty much good to go. Just re-configure and `cabal build`
+and `cabal test` to run the test suite.
+
 [1]: http://jinja.pocoo.org/
 [2]: https://github.com/sourrust/karver/issues
 [3]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 [4]: https://github.com/tpope/vim-fugitive
+[5]: http://www.haskell.org/platform/

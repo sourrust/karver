@@ -48,7 +48,7 @@ templateHashMap = H.fromList $
 main :: IO ()
 main = do
   tplStr <- T.readFile "path/to/template.html"
-  let htmlStr = renderTemplate _ tplStr
+  let htmlStr = renderTemplate templateHashMap tplStr
   T.writeFile "path/to/output.html"
 ```
 

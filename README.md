@@ -52,4 +52,26 @@ main = do
   T.writeFile "path/to/output.html"
 ```
 
+# How to Contribute
+
+Since karver is in early development, there is still work needed to be
+done. Whenever there is something that needs work on, it will typically
+be in [issues][2]. If there isn't issues open, try working on a feature
+that is in jinja, or an other template engines, that you want to see in
+karver.
+
+And before you start hacking on karver, here a same guide to go from add
+code to the project and getting it into the main repo.
+
+1. Never use the `master` branch while developing a feature.
+
+2. Keep commits to one idea at a time.
+
+3. If the feature is a new parser or function, write a test for it.
+
+4. Compile and run tests on feature.
+
+5. Submit pull request using the branch you are working on.
+
 [1]: http://jinja.pocoo.org/
+[2]: https://github.com/sourrust/karver/issues

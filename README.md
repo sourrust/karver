@@ -63,15 +63,42 @@ karver.
 And before you start hacking on karver, here a same guide to go from add
 code to the project and getting it into the main repo.
 
-1. Never use the `master` branch while developing a feature.
+### Never use the `master` branch while developing a feature.
 
-2. Keep commits to one idea at a time.
+When writing a new feature use a branch name that describes what you are
+working one, e.g. `parse/variable-assignment` if were working on a
+parser for variable assignment.
 
-3. If the feature is a new parser or function, write a test for it.
+The `master` branch is mainly for merging and some time version bumping;
+but, most of the time, you are never going to touch it directly.
 
-4. Compile and run tests on feature.
+### Keep commits to one idea at a time.
 
-5. Submit pull request using the branch you are working on.
+Committing small changes is the best way, for me at least, to look at
+what has changed during development. It is almost like a self documented
+changelog in the commit message.
+
+For a easy guide on how to structure you commit message just [follow
+tpope's, guide][3]. And if you want to make things easier on yourself,
+use a client for working with commit message. For me personally, I use
+[fugitive][4] because my editor of choice is vim.
+
+### If the feature is a new parser or function, write a test for it.
+
+I don't care whether you write test first and then add the
+implementation, or vice-versa. As long as there is some kind of test,
+that will show that the function is working correctly, I am happy.
+
+### Compile and run tests on feature.
+
+This the just so I know, at the very least, the code is working for you
+computer and you didn't break any of the other tests.
+
+### Submit pull request using the branch you are working on.
+
+Simple as that.
 
 [1]: http://jinja.pocoo.org/
 [2]: https://github.com/sourrust/karver/issues
+[3]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+[4]: https://github.com/tpope/vim-fugitive

@@ -122,11 +122,11 @@ and `cabal test` to run the test suite.
 
 ## Writing Tests
 
-Karver uses `[hspec][6]` for testing. Tests are located in the `test/`
+Karver uses [`hspec`][6] for testing. Tests are located in the `test/`
 directory and each file, being tested, has it's own corresponding Spec
 file. For example, `Text/Karver/Parser.hs` in `src/`, has a spec file
 `Text/Karver/ParserSpec.hs` inside of `test/`. Follow this rule if you
-add a new file that you want to test, because `[Spec.hs][7]` discovers
+add a new file that you want to test, because [`Spec.hs`][7] discovers
 the files with the name, so it needs Spec prefixing the file name for
 hspec to add it to the suite.
 

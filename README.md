@@ -120,8 +120,33 @@ cabal install attoparsec \
 And you're pretty much good to go. Just re-configure and `cabal build`
 and `cabal test` to run the test suite.
 
+## Writing Tests
+
+Karver uses `[hspec][6]` for testing. Tests are located in the `test/`
+directory and each file, being tested, has it's own corresponding Spec
+file. For example, `Text/Karver/Parser.hs` in `src/`, has a spec file
+`Text/Karver/ParserSpec.hs` inside of `test/`. Follow this rule if you
+add a new file that you want to test, because `[Spec.hs][7]` discovers
+the files with the name, so it needs Spec prefixing the file name for
+hspec to add it to the suite.
+
+Now, actually writing the test is pretty simple.
+
+```haskell
+describe "function you are testing" $ do
+  it "case you will test for" $ do
+    let value    = -- result from the function you are testing
+        expected = -- what you expect the value to be
+    value `shouldBe` expected
+```
+
+You can add more variable if needed, but the **value should be
+expected**, is just my personal preference to how the test should end.
+
 [1]: http://jinja.pocoo.org/
 [2]: https://github.com/sourrust/karver/issues
 [3]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 [4]: https://github.com/tpope/vim-fugitive
 [5]: http://www.haskell.org/platform/
+[6]: http://hspec.github.io/
+[7]: https://github.com/sourrust/karver/blob/master/test/Spec.hs

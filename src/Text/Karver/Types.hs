@@ -7,10 +7,13 @@ import Data.Vector
 type ObjectName = Text
 type Key        = Text
 
+type ListName   = Text
+type Index      = Int
+
 data Tokens = LiteralTok   Text
             | IdentityTok  Text
             | ObjectTok    ObjectName Key
-            | ListTok      Text Int
+            | ListTok      ListName   Index
             | ConditionTok Text Text Text
             | LoopTok      Text Text Text
             deriving (Show, Eq)

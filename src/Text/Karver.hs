@@ -10,8 +10,8 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Vector as V
 
-render :: Parser [Tokens]
-render = many1 $ choice [ variableParser
+templateParser :: Parser [Tokens]
+templateParser = many1 $ choice [ variableParser
                         , conditionParser
                         , loopParser
                         , literalParser
@@ -23,7 +23,7 @@ renderTemplate varTable = encode
         encode tlp
           | T.null tlp = tlp
           | otherwise  = merge $
-              case parseOnly render tlp of
+              case parseOnly templateParser tlp of
                 (Left err)  -> [LiteralTok $ T.pack err]
                 (Right res) -> res
 
@@ -60,7 +60,7 @@ renderTemplate varTable = encode
         decodeToken vTable (LoopTok a v b) =
           case H.lookup a vTable of
             (Just (List l)) ->
-              let toks = case parseOnly render b of
+              let toks = case parseOnly templateParser b of
                            (Left _)  -> []
                            (Right res) -> res
                   mapVars x = let x' = Literal x

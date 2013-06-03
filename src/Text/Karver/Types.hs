@@ -14,12 +14,15 @@ type Compare    = Text
 type IfBody     = Text
 type ElseBody   = Text
 
+type Element    = Text
+type LoopBody   = Text
+
 data Tokens = LiteralTok   Text
             | IdentityTok  Text
             | ObjectTok    ObjectName Key
             | ListTok      ListName   Index
             | ConditionTok Compare    IfBody  ElseBody
-            | LoopTok      Text Text Text
+            | LoopTok      ListName   Element LoopBody
             deriving (Show, Eq)
 
 data Value = Literal Text

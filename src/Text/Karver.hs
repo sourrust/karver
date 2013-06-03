@@ -10,13 +10,6 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Vector as V
 
-templateParser :: Parser [Tokens]
-templateParser = many1 $ choice [ variableParser
-                        , conditionParser
-                        , loopParser
-                        , literalParser
-                        ]
-
 renderTemplate :: HashMap Text Value -> Text -> Text
 renderTemplate varTable = encode
   where encode :: Text -> Text

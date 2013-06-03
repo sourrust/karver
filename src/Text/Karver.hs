@@ -3,7 +3,6 @@ module Text.Karver where
 import Text.Karver.Types
 import Text.Karver.Parse
 
-import Control.Applicative
 import Data.Attoparsec.Text
 import Data.HashMap.Strict (HashMap)
 import qualified Data.HashMap.Strict as H
@@ -22,10 +21,11 @@ renderTemplate varTable = encode
                 (Right res) -> res
 
         render :: Parser [Tokens]
-        render = many1 $ variableParser
-                     <|> literalParser
-                     <|> conditionParser
-                     <|> loopParser
+        render = many1 $ choice [ variableParser
+                                , conditionParser
+                                , loopParser
+                                , literalParser
+                                ]
 
         hasVariable :: Text -> Bool
         hasVariable txt =

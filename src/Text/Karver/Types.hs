@@ -4,11 +4,12 @@ import Data.Text (Text)
 import Data.HashMap.Strict
 import Data.Vector
 
-type Key = Text
+type ObjectName = Text
+type Key        = Text
 
 data Tokens = LiteralTok   Text
             | IdentityTok  Text
-            | ObjectTok    Text Key
+            | ObjectTok    ObjectName Key
             | ListTok      Text Int
             | ConditionTok Text Text Text
             | LoopTok      Text Text Text

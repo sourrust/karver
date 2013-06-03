@@ -10,11 +10,15 @@ type Key        = Text
 type ListName   = Text
 type Index      = Int
 
+type Compare    = Text
+type IfBody     = Text
+type ElseBody   = Text
+
 data Tokens = LiteralTok   Text
             | IdentityTok  Text
             | ObjectTok    ObjectName Key
             | ListTok      ListName   Index
-            | ConditionTok Text Text Text
+            | ConditionTok Compare    IfBody  ElseBody
             | LoopTok      Text Text Text
             deriving (Show, Eq)
 

@@ -20,14 +20,6 @@ renderTemplate varTable = encode
                 (Left err)  -> [LiteralTok $ T.pack err]
                 (Right res) -> res
 
-        hasVariable :: Text -> Bool
-        hasVariable txt =
-          case parseOnly variableParser' txt of
-            (Right res) -> if T.null $ decodeToken varTable res
-                             then False
-                             else True
-            _           -> False
-
         merge :: [Tokens] -> Text
         merge = T.concat . map (decodeToken varTable)
         decodeToken _ (LiteralTok x)       = x
@@ -50,6 +42,13 @@ renderTemplate varTable = encode
           if hasVariable c
             then encode t
             else encode f
+          where hasVariable txt =
+                  case parseOnly variableParser' txt of
+                    (Right res) ->
+                      if T.null $ decodeToken varTable res
+                        then False
+                        else True
+                    _           -> False
         decodeToken vTable (LoopTok a v b) =
           case H.lookup a vTable of
             (Just (List l)) ->

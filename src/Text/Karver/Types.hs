@@ -1,4 +1,7 @@
-module Text.Karver.Types where
+module Text.Karver.Types
+( Tokens(..)
+, Value(..)
+) where
 
 import Data.Text (Text)
 import Data.HashMap.Strict

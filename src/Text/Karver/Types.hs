@@ -1,17 +1,31 @@
-module Text.Karver.Types where
+module Text.Karver.Types
+( Tokens(..)
+, Value(..)
+) where
 
 import Data.Text (Text)
 import Data.HashMap.Strict
 import Data.Vector
 
-type Key = Text
+type ObjectName = Text
+type Key        = Text
+
+type ListName   = Text
+type Index      = Int
+
+type Compare    = Text
+type IfBody     = Text
+type ElseBody   = Text
+
+type Element    = Text
+type LoopBody   = Text
 
 data Tokens = LiteralTok   Text
             | IdentityTok  Text
-            | ObjectTok    Text Key
-            | ListTok      Text Int
-            | ConditionTok Text Text Text
-            | LoopTok      Text Text Text
+            | ObjectTok    ObjectName Key
+            | ListTok      ListName   Index
+            | ConditionTok Compare    IfBody  ElseBody
+            | LoopTok      ListName   Element LoopBody
             deriving (Show, Eq)
 
 data Value = Literal Text

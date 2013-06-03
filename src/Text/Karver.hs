@@ -10,6 +10,13 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Vector as V
 
+render :: Parser [Tokens]
+render = many1 $ choice [ variableParser
+                        , conditionParser
+                        , loopParser
+                        , literalParser
+                        ]
+
 renderTemplate :: HashMap Text Value -> Text -> Text
 renderTemplate varTable = encode
   where encode :: Text -> Text
@@ -19,13 +26,6 @@ renderTemplate varTable = encode
               case parseOnly render tlp of
                 (Left err)  -> [LiteralTok $ T.pack err]
                 (Right res) -> res
-
-        render :: Parser [Tokens]
-        render = many1 $ choice [ variableParser
-                                , conditionParser
-                                , loopParser
-                                , literalParser
-                                ]
 
         hasVariable :: Text -> Bool
         hasVariable txt =

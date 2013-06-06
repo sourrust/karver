@@ -19,7 +19,9 @@ renderer = renderTemplate
               , ("template",    Object $ fromList
                                   [ ("name", "karver")])
               , ("libraries",   List $ V.fromList
-                                  ["attoparsec", "hspec"])
+                                  [ Literal "attoparsec"
+                                  , Literal "hspec"
+                                  ])
               ])
 
 spec :: Spec

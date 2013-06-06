@@ -19,7 +19,23 @@ renderer = renderTemplate
               , ("template",    Object $ fromList
                                   [ ("name", "karver")])
               , ("libraries",   List $ V.fromList
-                                  ["attoparsec", "hspec"])
+                                  [ Literal "attoparsec"
+                                  , Literal "hspec"
+                                  ])
+              , ("titles",      List $ V.fromList
+                                  [ Object $ fromList
+                                    [ ("name", "Karver the Template")
+                                    , ("id",   "karver_the_template")
+                                    ]
+                                  , Object $ fromList
+                                    [ ("name", "BDD with Hspec")
+                                    , ("id",   "bdd_with_hspec")
+                                    ]
+                                  , Object $ fromList
+                                    [ ("name", "Attoparsec the Parser")
+                                    , ("id",   "attoparsec_the_parser")
+                                    ]
+                                  ])
               ])
 
 spec :: Spec
@@ -198,6 +214,41 @@ spec = do
           expected = unlines [ "Some libraries used:"
                              , "* attoparsec"
                              , "* hspec\n"
+                             ]
+
+      value `shouldBe` expected
+
+    it "loop over an array, with objects #1" $ do
+      let withObj  = concat [ "{% for title in titles %}"
+                            , "<a id=\"{{ title.id }}\">"
+                            , "{{ title.name }}</a>"
+                            , "{% endfor %}"
+                            ]
+          value    = renderer withObj
+          expected = concat [ "<a id=\"karver_the_template\">"
+                            , "Karver the Template</a>"
+                            , "<a id=\"bdd_with_hspec\">BDD with Hspec</a>"
+                            , "<a id=\"attoparsec_the_parser\">"
+                            , "Attoparsec the Parser</a>"
+                            ]
+
+      value `shouldBe` expected
+
+    it "loop over an array, with objects #2" $ do
+      let withObj  = unlines [ "{% for title in titles %}"
+                             , concat [ "<a id=\"{{ title.id }}\">"
+                                      , "{{ title.name }}</a>"
+                                      ]
+                             , "{% endfor %}"
+                             ]
+          value    = renderer withObj
+          expected = unlines [ concat [ "<a id=\"karver_the_template\">"
+                                      , "Karver the Template</a>"
+                                      ]
+                             , "<a id=\"bdd_with_hspec\">BDD with Hspec</a>"
+                             , concat [ "<a id=\"attoparsec_the_parser\">"
+                                      , "Attoparsec the Parser</a>\n"
+                                      ]
                              ]
 
       value `shouldBe` expected

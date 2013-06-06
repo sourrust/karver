@@ -36,7 +36,9 @@ renderTemplate varTable = encode
             _              -> T.empty
         decodeToken vTable (ListTok a i) =
           case H.lookup a vTable of
-            (Just (List l)) -> l V.! i
+            (Just (List l)) -> case l V.! i of
+                                 (Literal t) -> t
+                                 _           -> T.empty
             _               -> T.empty
         decodeToken _ (ConditionTok c t f) =
           if hasVariable c
@@ -55,8 +57,8 @@ renderTemplate varTable = encode
               let toks = case parseOnly templateParser b of
                            (Left _)  -> []
                            (Right res) -> res
-                  mapVars x = let x' = Literal x
-                              in map (decodeToken (H.singleton v x')) toks
+                  mapVars x = let vTable' = H.insert v x vTable
+                              in map (decodeToken vTable') toks
               in if null toks
                    then T.empty
                    else T.concat . V.toList $ V.map (T.concat . mapVars) l

@@ -17,7 +17,7 @@ A small taste of the syntax being:
 
 <ul>
 {% for item in items %}
-  <li>{{ item }}</li>
+  <li>{{ item.name }} for {{ item.price }}</li>
 {% endfor %}
 </ul>
 ```

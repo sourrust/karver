@@ -30,5 +30,5 @@ data Tokens = LiteralTok   Text
 
 data Value = Literal Text
            | Object (HashMap Text Text)
-           | List   (Vector Text)
+           | List   (Vector Value)
            deriving (Show)

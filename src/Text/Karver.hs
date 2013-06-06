@@ -57,7 +57,8 @@ renderTemplate varTable = encode
               let toks = case parseOnly templateParser b of
                            (Left _)  -> []
                            (Right res) -> res
-                  mapVars x = map (decodeToken (H.singleton v x)) toks
+                  mapVars x = let vTable' = H.insert v x vTable
+                              in map (decodeToken vTable') toks
               in if null toks
                    then T.empty
                    else T.concat . V.toList $ V.map (T.concat . mapVars) l

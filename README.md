@@ -17,7 +17,7 @@ A small taste of the syntax being:
 
 <ul>
 {% for item in items %}
-  <li>{{ item }}</li>
+  <li>{{ item.name }} for {{ item.price }}</li>
 {% endfor %}
 </ul>
 ```
@@ -41,8 +41,10 @@ import qualified Data.Vector as V
 templateHashMap :: HashMap Text Value
 templateHashMap = H.fromList $
   [ ("title", Literal "Grocery List")
-  , ("items", List $ V.fromList
-                ["eggs", "flour", "cereal"])
+  , ("items", List $ V.fromList [ Literal "eggs"
+                                , Literal "flour"
+                                , Literal "cereal"
+                                ])
   ]
 
 main :: IO ()

@@ -66,6 +66,10 @@ variableParser, variableParser' :: Parser Tokens
 variableParser  = variableParser_ identityDelimiter
 variableParser' = variableParser_ id
 
+skipSpaceTillEOL :: Parser ()
+skipSpaceTillEOL = option () $ skipWhile isHorizontalSpace >> endOfLine
+{-# INLINE skipSpaceTillEOL #-}
+
 conditionParser :: Parser Tokens
 conditionParser = do
   logic <- expressionDelimiter $ do

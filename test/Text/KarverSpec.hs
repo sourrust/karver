@@ -189,14 +189,14 @@ spec = do
                             , "{% endif %}"
                             ]
           value    = renderer elemText
-          expected = "BSD3 is the license."
+          expected = "  BSD3 is the license."
 
       value `shouldBe` expected
 
     it "loop over an array, single variable #1" $ do
       let loopText = concat [ "Some libraries used: "
                             , "{% for library in libraries %}"
-                            , "  {{ library }} "
+                            , "{{ library }} "
                             , "{% endfor %}."
                             ]
           value    = renderer loopText

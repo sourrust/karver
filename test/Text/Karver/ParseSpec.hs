@@ -129,7 +129,7 @@ spec = do
                               , "{% endif %}"
                               ]
           value     = condition ifText
-          expected  = Right $ ConditionTok "title" "{{ title }}\n" ""
+          expected  = Right $ ConditionTok "title" "  {{ title }}\n" ""
 
       value `shouldBe` expected
 
@@ -150,7 +150,9 @@ spec = do
                               , "{% endif %}"
                               ]
           value     = condition ifText
-          expected  = Right $ ConditionTok "title" "{{ title }}\n" "title\n"
+          expected  = Right $ ConditionTok "title"
+                                           "  {{ title }}\n"
+                                           "  title\n"
 
       value `shouldBe` expected
 
@@ -161,7 +163,7 @@ spec = do
                             , "{% endfor %}"
                             ]
           value    = loop loopText
-          expected = Right $ LoopTok "items" "item" "{{ item }}"
+          expected = Right $ LoopTok "items" "item" "  {{ item }}"
 
       value `shouldBe` expected
 
@@ -171,7 +173,7 @@ spec = do
                              , "{% endfor %}"
                              ]
           value    = loop loopText
-          expected = Right $ LoopTok "items" "item" "{{ item }}\n"
+          expected = Right $ LoopTok "items" "item" "  {{ item }}\n"
 
       value `shouldBe` expected
 

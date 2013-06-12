@@ -153,7 +153,7 @@ spec = do
                             , "{% endif %}"
                             ]
           value    = renderer elemText
-          expected = "karver is the template."
+          expected = "  karver is the template."
 
       value `shouldBe` expected
 
@@ -165,7 +165,7 @@ spec = do
                             , "{% endif %}"
                             ]
           value    = renderer elemText
-          expected = "hspec makes testing enjoyable!"
+          expected = "  hspec makes testing enjoyable!"
 
       value `shouldBe` expected
 
@@ -177,7 +177,7 @@ spec = do
                              , "{% endif %}"
                              ]
           value     = renderer falseText
-          expected  = "karver is open source"
+          expected  = "  karver is open source"
 
       value `shouldBe` expected
 

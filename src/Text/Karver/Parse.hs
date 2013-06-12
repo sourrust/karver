@@ -78,13 +78,14 @@ conditionParser = do
     condition <- takeTill (inClass " %")
     return condition
   let anyTill   = manyTill anyChar
-      ifparse   = skipSpace *> anyTill (expressionDelimiter
-                                      $ string "endif"
-                                    <|> string "else")
-      elseparse = skipSpace *> anyTill (expressionDelimiter
-                                      $ string "endif")
+      ifparse   = skipSpaceTillEOL *> anyTill (expressionDelimiter
+                                             $ string "endif"
+                                           <|> string "else")
+      elseparse = skipSpaceTillEOL *> anyTill (expressionDelimiter
+                                             $ string "endif")
   ifbody <- pack <$> ifparse
   elsebody <- option empty (pack <$> elseparse)
+  skipSpaceTillEOL
   return $ ConditionTok logic ifbody elsebody
 
 loopParser :: Parser Tokens
@@ -98,6 +99,7 @@ loopParser = do
     skipSpace
     arrName <- takeTill (inClass " %")
     return (arrName, varName)
-  skipSpace
+  skipSpaceTillEOL
   loopbody <- manyTill anyChar (expressionDelimiter $ string "endfor")
+  skipSpaceTillEOL
   return $ LoopTok arr var $ pack loopbody

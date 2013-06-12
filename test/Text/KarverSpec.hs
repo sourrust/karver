@@ -173,7 +173,7 @@ spec = do
       let falseText = concat [ "{% if closed %}"
                              , "  karver is closed source"
                              , "{% else %}"
-                             ,  " karver is open source"
+                             , "  karver is open source"
                              , "{% endif %}"
                              ]
           value     = renderer falseText

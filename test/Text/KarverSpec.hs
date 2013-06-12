@@ -153,7 +153,7 @@ spec = do
                             , "{% endif %}"
                             ]
           value    = renderer elemText
-          expected = "karver is the template."
+          expected = "  karver is the template."
 
       value `shouldBe` expected
 
@@ -165,7 +165,7 @@ spec = do
                             , "{% endif %}"
                             ]
           value    = renderer elemText
-          expected = "hspec makes testing enjoyable!"
+          expected = "  hspec makes testing enjoyable!"
 
       value `shouldBe` expected
 
@@ -173,11 +173,11 @@ spec = do
       let falseText = concat [ "{% if closed %}"
                              , "  karver is closed source"
                              , "{% else %}"
-                             ,  " karver is open source"
+                             , "  karver is open source"
                              , "{% endif %}"
                              ]
           value     = renderer falseText
-          expected  = "karver is open source"
+          expected  = "  karver is open source"
 
       value `shouldBe` expected
 
@@ -189,14 +189,14 @@ spec = do
                             , "{% endif %}"
                             ]
           value    = renderer elemText
-          expected = "BSD3 is the license."
+          expected = "  BSD3 is the license."
 
       value `shouldBe` expected
 
     it "loop over an array, single variable #1" $ do
       let loopText = concat [ "Some libraries used: "
                             , "{% for library in libraries %}"
-                            , "  {{ library }} "
+                            , "{{ library }} "
                             , "{% endfor %}."
                             ]
           value    = renderer loopText
@@ -212,8 +212,8 @@ spec = do
                              ]
           value    = renderer loopText
           expected = unlines [ "Some libraries used:"
-                             , "* attoparsec"
-                             , "* hspec\n"
+                             , "  * attoparsec"
+                             , "  * hspec"
                              ]
 
       value `shouldBe` expected
@@ -247,7 +247,7 @@ spec = do
                                       ]
                              , "<a id=\"bdd_with_hspec\">BDD with Hspec</a>"
                              , concat [ "<a id=\"attoparsec_the_parser\">"
-                                      , "Attoparsec the Parser</a>\n"
+                                      , "Attoparsec the Parser</a>"
                                       ]
                              ]
 

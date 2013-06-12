@@ -212,8 +212,8 @@ spec = do
                              ]
           value    = renderer loopText
           expected = unlines [ "Some libraries used:"
-                             , "* attoparsec"
-                             , "* hspec\n"
+                             , "  * attoparsec"
+                             , "  * hspec"
                              ]
 
       value `shouldBe` expected
@@ -247,7 +247,7 @@ spec = do
                                       ]
                              , "<a id=\"bdd_with_hspec\">BDD with Hspec</a>"
                              , concat [ "<a id=\"attoparsec_the_parser\">"
-                                      , "Attoparsec the Parser</a>\n"
+                                      , "Attoparsec the Parser</a>"
                                       ]
                              ]
 

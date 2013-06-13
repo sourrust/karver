@@ -3,6 +3,8 @@ module Text.Karver.Types
 , Value(..)
 ) where
 
+import Prelude hiding (FilePath)
+
 import Data.Text (Text)
 import Data.HashMap.Strict
 import Data.Vector
@@ -20,12 +22,15 @@ type ElseBody   = Text
 type Element    = Text
 type LoopBody   = Text
 
+type FilePath   = Text
+
 data Tokens = LiteralTok   Text
             | IdentityTok  Text
             | ObjectTok    ObjectName Key
             | ListTok      ListName   Index
             | ConditionTok Compare    IfBody  ElseBody
             | LoopTok      ListName   Element LoopBody
+            | IncludeTok   FilePath
             deriving (Show, Eq)
 
 data Value = Literal Text

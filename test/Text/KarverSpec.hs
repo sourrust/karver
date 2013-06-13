@@ -269,3 +269,19 @@ spec = do
           expected    = "<footer>Content in the file.\n</footer>"
 
       value `shouldBe` expected
+
+    it "include a template with surroundind markup #2" $ do
+      let includeText = unlines [ "<ul>"
+                                , concat [ "{% include "
+                                         , "'test/template/template.html"
+                                         , "' %}</ul>"
+                                         ]
+                                ]
+          value       = renderer includeText
+          expected    = unlines [ "<ul>"
+                                , "  <li>attoparsec</li>"
+                                , "  <li>hspec</li>"
+                                , "</ul>"
+                                ]
+
+      value `shouldBe` expected

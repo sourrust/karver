@@ -21,6 +21,7 @@ templateParser = many1 $ choice [ variableParser
                                 , conditionParser
                                 , loopParser
                                 , literalParser
+                                , includeParser
                                 ]
 
 

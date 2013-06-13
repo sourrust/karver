@@ -7,6 +7,7 @@ module Text.Karver.Parse
 , variableParser'
 , conditionParser
 , loopParser
+, includeParser
 ) where
 
 import Text.Karver.Types
@@ -20,6 +21,7 @@ templateParser = many1 $ choice [ variableParser
                                 , conditionParser
                                 , loopParser
                                 , literalParser
+                                , includeParser
                                 ]
 
 
@@ -103,3 +105,12 @@ loopParser = do
   loopbody <- manyTill anyChar (expressionDelimiter $ string "endfor")
   skipSpaceTillEOL
   return $ LoopTok arr var $ pack loopbody
+
+includeParser :: Parser Tokens
+includeParser = expressionDelimiter $ do
+  string "include"
+  skipSpace
+  char '"' <|> char '\''
+  filepath <- takeTill (inClass "'\"")
+  char '"' <|> char '\''
+  return $ IncludeTok filepath

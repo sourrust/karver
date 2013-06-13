@@ -3,12 +3,15 @@ module Text.Karver where
 import Text.Karver.Types
 import Text.Karver.Parse
 
+import Control.Applicative ((<$>))
 import Data.Attoparsec.Text
 import Data.HashMap.Strict (HashMap)
 import qualified Data.HashMap.Strict as H
 import Data.Text (Text)
 import qualified Data.Text as T
+import qualified Data.Text.IO as TI
 import qualified Data.Vector as V
+import System.IO.Unsafe (unsafePerformIO)
 
 renderTemplate :: HashMap Text Value -> Text -> Text
 renderTemplate varTable = encode
@@ -63,3 +66,5 @@ renderTemplate varTable = encode
                    then T.empty
                    else T.concat . V.toList $ V.map (T.concat . mapVars) l
             _               -> T.empty
+        decodeToken _ (IncludeTok f) =
+          unsafePerformIO $ encode <$> TI.readFile (T.unpack f)

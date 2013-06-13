@@ -10,11 +10,13 @@ import Data.Attoparsec.Text (parseOnly)
 import Data.Text (Text, concat, pack, unlines)
 import Test.Hspec
 
-literal, variable, condition, loop :: Text -> Either String Tokens
+literal, variable, condition, loop, include
+  :: Text -> Either String Tokens
 literal   = parseOnly literalParser
 variable  = parseOnly variableParser
 condition = parseOnly conditionParser
 loop      = parseOnly loopParser
+include   = parseOnly includeParser
 
 noDemVariable :: Text -> Either String Tokens
 noDemVariable = parseOnly variableParser'
@@ -174,6 +176,21 @@ spec = do
                              ]
           value    = loop loopText
           expected = Right $ LoopTok "items" "item" "  {{ item }}\n"
+
+      value `shouldBe` expected
+
+  describe "includeParser" $ do
+    it "import single quote" $ do
+      let includeText = "{% include 'template.html' %}"
+          value       = include includeText
+          expected    = Right $ IncludeTok "template.html"
+
+      value `shouldBe` expected
+
+    it "import double quote" $ do
+      let includeText = "{% include \"template.html\" %}"
+          value       = include includeText
+          expected    = Right $ IncludeTok "template.html"
 
       value `shouldBe` expected
 

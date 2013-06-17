@@ -67,4 +67,4 @@ renderTemplate varTable = encode
                    else T.concat . V.toList $ V.map (T.concat . mapVars) l
             _               -> T.empty
         decodeToken _ (IncludeTok f) =
-          unsafePerformIO $ encode <$> TI.readFile (T.unpack f)
+          unsafePerformIO $ encode . T.init <$> TI.readFile (T.unpack f)

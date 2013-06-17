@@ -256,7 +256,7 @@ spec = do
     it "include a template alone" $ do
       let includeText = "{% include 'test/template/text.html' %}"
           value       = renderer includeText
-          expected    = "Content in the file.\n"
+          expected    = "Content in the file."
 
       value `shouldBe` expected
 
@@ -266,7 +266,7 @@ spec = do
                                , "</footer>"
                                ]
           value       = renderer includeText
-          expected    = "<footer>Content in the file.\n</footer>"
+          expected    = "<footer>Content in the file.</footer>"
 
       value `shouldBe` expected
 

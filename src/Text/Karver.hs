@@ -1,3 +1,15 @@
+-- |
+-- Module:      Data.Karver
+-- Copyright:   Jeremy Hull 2013
+-- License:     BSD3
+--
+-- Maintainer:  Jeremy Hull <sourdrums@gmail.com>
+-- Stability:   experimental
+-- Portability: unknown
+--
+-- The "Text.Karver" interface for translation 'Text' from it's template
+-- syntax, to a generated value — based on the data that was given.
+
 module Text.Karver where
 
 import Text.Karver.Types
@@ -13,7 +25,11 @@ import qualified Data.Text.IO as TI
 import qualified Data.Vector as V
 import System.IO.Unsafe (unsafePerformIO)
 
-renderTemplate :: HashMap Text Value -> Text -> Text
+-- | Renders a template
+renderTemplate :: HashMap Text Value -- ^ Data map for variables inside
+                                     --   a given template
+               -> Text               -- ^ Template
+               -> Text
 renderTemplate varTable = encode
   where encode :: Text -> Text
         encode tlp

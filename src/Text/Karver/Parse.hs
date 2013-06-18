@@ -1,3 +1,15 @@
+-- |
+-- Module:      Data.Karver.Parse
+-- Copyright:   Jeremy Hull 2013
+-- License:     BSD3
+--
+-- Maintainer:  Jeremy Hull <sourdrums@gmail.com>
+-- Stability:   experimental
+-- Portability: unknown
+--
+-- All the 'Parser's are defined here, including the one used by the top
+-- level module "Text.Karver".
+
 {-# LANGUAGE OverloadedStrings #-}
 
 module Text.Karver.Parse
@@ -16,6 +28,7 @@ import Data.Attoparsec.Text
 import Data.Text (Text, empty, pack)
 import Control.Applicative ((<|>), (<$>), (*>), (<*))
 
+-- | Top level 'Parser' that will translate 'Text' into ['Tokens']
 templateParser :: Parser [Tokens]
 templateParser = many1 $ choice [ variableParser
                                 , conditionParser
@@ -25,11 +38,14 @@ templateParser = many1 $ choice [ variableParser
                                 ]
 
 
+-- | Takes everything until it reaches a @{@, resulting in the 'LiteralTok'
 literalParser :: Parser Tokens
 literalParser = do
   html <- takeWhile1 (/= '{')
   return $ LiteralTok html
 
+-- General function for making parsers that will be surrounded by a curtain
+-- delimiter — which has both a beginning and end.
 delimiterParser :: Text -> Text -> Parser a -> Parser a
 delimiterParser begin end parseFunc = do
   string begin
@@ -40,10 +56,12 @@ delimiterParser begin end parseFunc = do
   return val
 
 identityDelimiter, expressionDelimiter :: Parser a -> Parser a
-identityDelimiter = delimiterParser "{{" "}}"
 
+identityDelimiter   = delimiterParser "{{" "}}"
 expressionDelimiter = delimiterParser "{%" "%}"
 
+-- General parser for the several variable types. It is basically used to
+-- not repeat parsers with and without a delimiter.
 variableParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
 variableParser_ fn = fn $ do
   ident <- takeTill (inClass " .[}")
@@ -65,13 +83,35 @@ variableParser_ fn = fn $ do
 
 variableParser, variableParser' :: Parser Tokens
 
+-- | 'Parser' for all the variable types. Returning on of the following
+-- 'Tokens':
+--
+-- * 'IncludeTok'
+--
+-- * 'ListTok'
+--
+-- * 'ObjectTok'
 variableParser  = variableParser_ identityDelimiter
+
+-- | 'Parser' for all the variable types. Returning on of the following
+-- 'Tokens':
+--
+-- * 'IncludeTok'
+--
+-- * 'ListTok'
+--
+-- * 'ObjectTok'
+--
+-- This is without the delimiter
 variableParser' = variableParser_ id
 
+-- Parser for skipping over horizontal space and end on a newline
+-- character, which will be skipped as well.
 skipSpaceTillEOL :: Parser ()
 skipSpaceTillEOL = option () $ skipWhile isHorizontalSpace >> endOfLine
 {-# INLINE skipSpaceTillEOL #-}
 
+-- | 'Parser' for if statements, that will result in the 'ConditionTok'
 conditionParser :: Parser Tokens
 conditionParser = do
   logic <- expressionDelimiter $ do
@@ -90,6 +130,7 @@ conditionParser = do
   skipSpaceTillEOL
   return $ ConditionTok logic ifbody elsebody
 
+-- | 'Parser' for for loops, that will result in the 'LoopTok'
 loopParser :: Parser Tokens
 loopParser = do
   (arr, var) <- expressionDelimiter $ do
@@ -106,6 +147,7 @@ loopParser = do
   skipSpaceTillEOL
   return $ LoopTok arr var $ pack loopbody
 
+-- | 'Parser' for includes, that will result in 'IncludeTok'
 includeParser :: Parser Tokens
 includeParser = expressionDelimiter $ do
   let quote c = char c *> takeTill (== c) <* char c

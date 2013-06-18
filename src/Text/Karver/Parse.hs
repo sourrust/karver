@@ -6,6 +6,9 @@
 -- Maintainer:  Jeremy Hull <sourdrums@gmail.com>
 -- Stability:   experimental
 -- Portability: unknown
+--
+-- All the 'Parser's are defined here, including the one used by the top
+-- level module "Text.Karver".
 
 {-# LANGUAGE OverloadedStrings #-}
 

@@ -28,6 +28,7 @@ import Data.Attoparsec.Text
 import Data.Text (Text, empty, pack)
 import Control.Applicative ((<|>), (<$>), (*>), (<*))
 
+-- | Top level 'Parser' that will translate 'Text' into ['Tokens']
 templateParser :: Parser [Tokens]
 templateParser = many1 $ choice [ variableParser
                                 , conditionParser
@@ -37,6 +38,7 @@ templateParser = many1 $ choice [ variableParser
                                 ]
 
 
+-- | Takes everything until it reaches a @{@, resulting in the 'LiteralTok'
 literalParser :: Parser Tokens
 literalParser = do
   html <- takeWhile1 (/= '{')
@@ -77,13 +79,33 @@ variableParser_ fn = fn $ do
 
 variableParser, variableParser' :: Parser Tokens
 
+-- | 'Parser' for all the variable types. Returning on of the following
+-- 'Tokens':
+--
+-- * 'IncludeTok'
+--
+-- * 'ListTok'
+--
+-- * 'ObjectTok'
 variableParser  = variableParser_ identityDelimiter
+
+-- | 'Parser' for all the variable types. Returning on of the following
+-- 'Tokens':
+--
+-- * 'IncludeTok'
+--
+-- * 'ListTok'
+--
+-- * 'ObjectTok'
+--
+-- This is without the delimiter
 variableParser' = variableParser_ id
 
 skipSpaceTillEOL :: Parser ()
 skipSpaceTillEOL = option () $ skipWhile isHorizontalSpace >> endOfLine
 {-# INLINE skipSpaceTillEOL #-}
 
+-- | 'Parser' for if statements, that will result in the 'ConditionTok'
 conditionParser :: Parser Tokens
 conditionParser = do
   logic <- expressionDelimiter $ do
@@ -102,6 +124,7 @@ conditionParser = do
   skipSpaceTillEOL
   return $ ConditionTok logic ifbody elsebody
 
+-- | 'Parser' for for loops, that will result in the 'LoopTok'
 loopParser :: Parser Tokens
 loopParser = do
   (arr, var) <- expressionDelimiter $ do
@@ -118,6 +141,7 @@ loopParser = do
   skipSpaceTillEOL
   return $ LoopTok arr var $ pack loopbody
 
+-- | 'Parser' for includes, that will result in 'IncludeTok'
 includeParser :: Parser Tokens
 includeParser = expressionDelimiter $ do
   let quote c = char c *> takeTill (== c) <* char c

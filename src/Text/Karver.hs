@@ -25,7 +25,11 @@ import qualified Data.Text.IO as TI
 import qualified Data.Vector as V
 import System.IO.Unsafe (unsafePerformIO)
 
-renderTemplate :: HashMap Text Value -> Text -> Text
+-- | Renders a template
+renderTemplate :: HashMap Text Value -- ^ Data map for variables inside
+                                     --   a given template
+               -> Text               -- ^ Template
+               -> Text
 renderTemplate varTable = encode
   where encode :: Text -> Text
         encode tlp

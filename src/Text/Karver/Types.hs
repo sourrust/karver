@@ -20,21 +20,6 @@ import Data.Text (Text)
 import Data.HashMap.Strict
 import Data.Vector
 
-type ObjectName = Text
-type Key        = Text
-
-type ListName   = Text
-type Index      = Int
-
-type Compare    = Text
-type IfBody     = Text
-type ElseBody   = Text
-
-type Element    = Text
-type LoopBody   = Text
-
-type FilePath   = Text
-
 -- | When dealing with the syntax of karver, we first traslate the given
 -- 'Text' in 'Tokens' for easier manipulation. Each 'Tokens' type is
 -- a repesentation of a certain type of data.

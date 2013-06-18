@@ -14,8 +14,6 @@ module Text.Karver.Types
 , Value(..)
 ) where
 
-import Prelude hiding (FilePath)
-
 import Data.Text (Text)
 import Data.HashMap.Strict
 import Data.Vector

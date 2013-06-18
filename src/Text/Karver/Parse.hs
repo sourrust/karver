@@ -14,7 +14,7 @@ import Text.Karver.Types
 
 import Data.Attoparsec.Text
 import Data.Text (Text, empty, pack)
-import Control.Applicative ((<|>), (<$>), (*>))
+import Control.Applicative ((<|>), (<$>), (*>), (<*))
 
 templateParser :: Parser [Tokens]
 templateParser = many1 $ choice [ variableParser

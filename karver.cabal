@@ -1,44 +1,49 @@
-name:                  karver
-version:               0.0.1
-cabal-version:         >= 1.8
-build-type:            Simple
-license:               BSD3
-license-file:          LICENSE
-copyright:             (c) 2013 Jeremy Hull
-author:                Jeremy Hull <sourdrums@gmail.com>
-maintainer:            Jeremy Hull <sourdrums@gmail.com>
-bug-reports:           https://github.com/sourrust/karver/issues
-stability:             experimental
-category:              Text
-tested-with:           GHC == 7.4.2
-synopsis:              A simple template engine, inspired by jinja2
+name:             karver
+version:          0.0.1
+cabal-version:    >= 1.8
+build-type:       Simple
+license:          BSD3
+license-file:     LICENSE
+copyright:        (c) 2013 Jeremy Hull
+author:           Jeremy Hull <sourdrums@gmail.com>
+maintainer:       Jeremy Hull <sourdrums@gmail.com>
+bug-reports:      https://github.com/sourrust/karver/issues
+stability:        experimental
+category:         Text
+tested-with:      GHC == 7.4.2
+synopsis:         A simple template engine, inspired by jinja2
+description:      Karver is heavily inspired by the python project jinja2,
+                  at least syntactic wise. This template engine strives to
+                  be simple and fast, leveraging libraries like attoparsec
+                  and data types like Text.
 
 source-repository head
-  type:                git
-  location:            git://github.com/sourrust/karver.git
+  type:           git
+  location:       git://github.com/sourrust/karver.git
 
 library
-  ghc-options:         -Wall
-                       -fno-warn-unused-do-bind
-  hs-source-dirs:      src
-  exposed-modules:     Text.Karver
-                       Text.Karver.Parse
-                       Text.Karver.Types
-  build-depends:       base >= 4 && < 5,
-                       text >= 0.11,
-                       unordered-containers >= 0.2,
-                       vector >= 0.10,
-                       attoparsec >= 0.10
+  ghc-options:    -Wall
+                  -fno-warn-unused-do-bind
+  hs-source-dirs: src
+  exposed-modules:
+                  Text.Karver
+                  Text.Karver.Parse
+                  Text.Karver.Types
+  build-depends:  base >= 4 && < 5,
+                  text >= 0.11,
+                  unordered-containers >= 0.2,
+                  vector >= 0.10,
+                  attoparsec >= 0.10
 
 test-suite spec
-  type:               exitcode-stdio-1.0
-  ghc-options:        -Wall -Werror
-  hs-source-dirs:     test
-  main-is:            Spec.hs
-  build-depends:      base >= 4 && < 5,
-                      karver,
-                      text >= 0.11,
-                      unordered-containers >= 0.2,
-                      attoparsec >= 0.10,
-                      vector >= 0.10,
-                      hspec >= 1.5
+  type:           exitcode-stdio-1.0
+  ghc-options:    -Wall -Werror
+  hs-source-dirs: test
+  main-is:        Spec.hs
+  build-depends:  base >= 4 && < 5,
+                  karver,
+                  text >= 0.11,
+                  unordered-containers >= 0.2,
+                  attoparsec >= 0.10,
+                  vector >= 0.10,
+                  hspec >= 1.5

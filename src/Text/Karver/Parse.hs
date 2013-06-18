@@ -108,9 +108,8 @@ loopParser = do
 
 includeParser :: Parser Tokens
 includeParser = expressionDelimiter $ do
+  let quote c = char c *> takeTill (== c) <* char c
   string "include"
   skipSpace
-  char '"' <|> char '\''
-  filepath <- takeTill (inClass "'\"")
-  char '"' <|> char '\''
+  filepath <- quote '"' <|> quote '\''
   return $ IncludeTok filepath

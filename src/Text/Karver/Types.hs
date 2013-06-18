@@ -6,6 +6,8 @@
 -- Maintainer:  Jeremy Hull <sourdrums@gmail.com>
 -- Stability:   experimental
 -- Portability: unknown
+--
+-- Base types used throughout Karver.
 
 module Text.Karver.Types
 ( Tokens(..)

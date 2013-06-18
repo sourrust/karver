@@ -12,6 +12,10 @@ stability:        experimental
 category:         Text
 tested-with:      GHC == 7.4.2
 synopsis:         A simple template engine, inspired by jinja2
+description:      Karver is heavily inspired by the python project jinja2,
+                  at least syntactic wise. This template engine strives to
+                  be simple and fast, leveraging libraries like attoparsec
+                  and data types like Text.
 
 source-repository head
   type:           git

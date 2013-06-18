@@ -47,6 +47,9 @@ data Tokens = LiteralTok   Text
             | IncludeTok   FilePath
             deriving (Show, Eq)
 
+-- | Fairly basic work around for using different types inside a 'HashMap'.
+-- The 'Value' type also make it possible for 'List' to contain more than
+-- one type.
 data Value = Literal Text
            | Object (HashMap Text Text)
            | List   (Vector Value)

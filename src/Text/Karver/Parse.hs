@@ -44,6 +44,8 @@ literalParser = do
   html <- takeWhile1 (/= '{')
   return $ LiteralTok html
 
+-- General function for making parsers that will be surrounded by a curtain
+-- delimiter — which has both a beginning and end.
 delimiterParser :: Text -> Text -> Parser a -> Parser a
 delimiterParser begin end parseFunc = do
   string begin
@@ -58,6 +60,8 @@ identityDelimiter, expressionDelimiter :: Parser a -> Parser a
 identityDelimiter   = delimiterParser "{{" "}}"
 expressionDelimiter = delimiterParser "{%" "%}"
 
+-- General parser for the several variable types. It is basically used to
+-- not repeat parsers with and without a delimiter.
 variableParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
 variableParser_ fn = fn $ do
   ident <- takeTill (inClass " .[}")
@@ -101,6 +105,8 @@ variableParser  = variableParser_ identityDelimiter
 -- This is without the delimiter
 variableParser' = variableParser_ id
 
+-- Parser for skipping over horizontal space and end on a newline
+-- character, which will be skipped as well.
 skipSpaceTillEOL :: Parser ()
 skipSpaceTillEOL = option () $ skipWhile isHorizontalSpace >> endOfLine
 {-# INLINE skipSpaceTillEOL #-}

@@ -18,9 +18,9 @@ import Data.Text (Text)
 import Data.HashMap.Strict
 import Data.Vector
 
--- | When dealing with the syntax of karver, we first traslate the given
+-- | When dealing with the syntax of karver, we first translate the given
 -- 'Text' in 'Tokens' for easier manipulation. Each 'Tokens' type is
--- a repesentation of a certain type of data.
+-- a representation of a certain type of data.
 data Tokens = LiteralTok   Text
             | IdentityTok  Text
             | ObjectTok    Text Text

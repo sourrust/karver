@@ -11,6 +11,7 @@ bug-reports:           https://github.com/sourrust/karver/issues
 stability:             experimental
 category:              Text
 tested-with:           GHC == 7.4.2
+synopsis:              A simple template engine, inspired by jinja2
 
 source-repository head
   type:                git

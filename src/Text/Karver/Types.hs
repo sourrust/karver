@@ -58,6 +58,12 @@ data Tokens = LiteralTok   Text
 -- The 'Value' type also make it possible for 'List' to contain more than
 -- one type.
 data Value = Literal Text
+           -- ^ The base value for the storing of variable.
            | Object (HashMap Text Text)
+           -- ^ An alias for 'HashMap', that will only hold 'Text' with
+           --   'Text' as a key as well.
            | List   (Vector Value)
+           -- ^ An alias for 'Vector', that can hold all three 'Value's
+           --   — which isn't desirable, because their can be nested
+           --   'List's.
            deriving (Show)

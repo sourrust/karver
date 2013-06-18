@@ -49,8 +49,8 @@ delimiterParser begin end parseFunc = do
   return val
 
 identityDelimiter, expressionDelimiter :: Parser a -> Parser a
-identityDelimiter = delimiterParser "{{" "}}"
 
+identityDelimiter   = delimiterParser "{{" "}}"
 expressionDelimiter = delimiterParser "{%" "%}"
 
 variableParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens

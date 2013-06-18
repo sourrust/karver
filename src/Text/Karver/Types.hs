@@ -40,11 +40,11 @@ type FilePath   = Text
 -- a repesentation of a certain type of data.
 data Tokens = LiteralTok   Text
             | IdentityTok  Text
-            | ObjectTok    ObjectName Key
-            | ListTok      ListName   Index
-            | ConditionTok Compare    IfBody  ElseBody
-            | LoopTok      ListName   Element LoopBody
-            | IncludeTok   FilePath
+            | ObjectTok    Text Text
+            | ListTok      Text Int
+            | ConditionTok Text Text Text
+            | LoopTok      Text Text Text
+            | IncludeTok   Text
             deriving (Show, Eq)
 
 -- | Fairly basic work around for using different types inside a 'HashMap'.

@@ -1,3 +1,12 @@
+-- |
+-- Module:      Data.Karver
+-- Copyright:   Jeremy Hull 2013
+-- License:     BSD3
+--
+-- Maintainer:  Jeremy Hull <sourdrums@gmail.com>
+-- Stability:   experimental
+-- Portability: unknown
+
 module Text.Karver where
 
 import Text.Karver.Types

@@ -6,6 +6,9 @@
 -- Maintainer:  Jeremy Hull <sourdrums@gmail.com>
 -- Stability:   experimental
 -- Portability: unknown
+--
+-- The "Text.Karver" interface for translation 'Text' from it's template
+-- syntax, to a generated value — based on the data that was given.
 
 module Text.Karver where
 

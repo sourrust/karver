@@ -87,7 +87,12 @@ renderTemplate varTable = encode
         decodeToken _ (IncludeTok f) =
           unsafePerformIO $ encode . T.init <$> TI.readFile (T.unpack f)
 
-renderTemplate' :: Text -> Text -> Text
+-- | Similar to renderTemplate, only it takes JSON 'Text' instead of
+-- a 'HashMap'
+renderTemplate' :: Text -- ^ JSON data, for variables inside a given
+                        --   template
+                -> Text -- ^ Template
+                -> Text
 renderTemplate' json tpl =
   case decode' . L.pack $ T.unpack json of
     (Just hash) -> renderTemplate hash tpl

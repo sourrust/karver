@@ -6,9 +6,12 @@ import Text.Karver
 import Text.Karver.Types
 
 import Prelude hiding (unlines, concat)
+import Data.Aeson (decode')
 import Data.HashMap.Strict (fromList)
-import Data.Text (Text, append, unlines, concat)
+import Data.Text (Text, append, unlines, concat, empty)
 import qualified Data.Vector as V
+import qualified Data.ByteString.Lazy.Char8 as L
+import System.IO.Unsafe (unsafePerformIO)
 import Test.Hspec
 
 renderer :: Text -> Text
@@ -37,6 +40,14 @@ renderer = renderTemplate
                                     ]
                                   ])
               ])
+
+rendererWithJSON :: Text -> Text
+rendererWithJSON t =
+  let json  = unsafePerformIO $ L.readFile "test/json/test-data.json"
+      obj   = decode' json
+  in case obj of
+       (Just o) -> renderTemplate o t
+       Nothing  -> empty
 
 spec :: Spec
 spec = do
@@ -283,5 +294,43 @@ spec = do
                                 , "  <li>hspec</li>"
                                 , "</ul>"
                                 ]
+
+      value `shouldBe` expected
+
+  describe "renderTemplate with JSON" $ do
+    it "identity at the end" $ do
+      let endText  = "Template engine named {{ project }}"
+          value    = rendererWithJSON endText
+          expected = "Template engine named karver"
+
+      value `shouldBe` expected
+
+    it "object identity" $ do
+      let objText  = "Templating with {{ template.name }} is easy."
+          value    = rendererWithJSON objText
+          expected = "Templating with karver is easy."
+
+      value `shouldBe` expected
+
+    it "mix of list and identity" $ do
+      let arrText  = "{{ project }} uses {{ libraries[1] }} for testing."
+          value    = rendererWithJSON arrText
+          expected = "karver uses hspec for testing."
+
+      value `shouldBe` expected
+
+    it "loop over an array, with objects #1" $ do
+      let withObj  = concat [ "{% for title in titles %}"
+                            , "<a id=\"{{ title.id }}\">"
+                            , "{{ title.name }}</a>"
+                            , "{% endfor %}"
+                            ]
+          value    = rendererWithJSON withObj
+          expected = concat [ "<a id=\"karver_the_template\">"
+                            , "Karver the Template</a>"
+                            , "<a id=\"bdd_with_hspec\">BDD with Hspec</a>"
+                            , "<a id=\"attoparsec_the_parser\">"
+                            , "Attoparsec the Parser</a>"
+                            ]
 
       value `shouldBe` expected

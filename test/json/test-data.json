@@ -1,0 +1,16 @@
+{ "project": "karver"
+, "language": "haskell"
+, "ver-control": "git"
+, "template": { "name": "karver" }
+, "libraries": [ "attoparsec", "hspec" ]
+, "titles": [ { "name": "Karver the Template"
+              , "id": "karver_the_template"
+              }
+            , { "name": "BDD with Hspec"
+              , "id": "bdd_with_hspec"
+              }
+            , { "name": "Attoparsec the Parser"
+              , "id": "attoparsec_the_parser"
+              }
+            ]
+}

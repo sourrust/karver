@@ -6,11 +6,10 @@ import Text.Karver
 import Text.Karver.Types
 
 import Prelude hiding (unlines, concat)
-import Data.Aeson (decode')
 import Data.HashMap.Strict (fromList)
-import Data.Text (Text, append, unlines, concat, empty)
+import Data.Text (Text, append, unlines, concat)
+import qualified Data.Text.IO as TI
 import qualified Data.Vector as V
-import qualified Data.ByteString.Lazy.Char8 as L
 import System.IO.Unsafe (unsafePerformIO)
 import Test.Hspec
 
@@ -43,11 +42,8 @@ renderer = renderTemplate
 
 rendererWithJSON :: Text -> Text
 rendererWithJSON t =
-  let json  = unsafePerformIO $ L.readFile "test/json/test-data.json"
-      obj   = decode' json
-  in case obj of
-       (Just o) -> renderTemplate o t
-       Nothing  -> empty
+  let json  = unsafePerformIO $ TI.readFile "test/json/test-data.json"
+  in renderTemplate' json t
 
 spec :: Spec
 spec = do

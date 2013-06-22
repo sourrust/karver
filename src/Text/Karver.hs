@@ -16,7 +16,9 @@ import Text.Karver.Types
 import Text.Karver.Parse
 
 import Control.Applicative ((<$>))
+import Data.Aeson (decode')
 import Data.Attoparsec.Text
+import qualified Data.ByteString.Lazy.Char8 as L
 import Data.HashMap.Strict (HashMap)
 import qualified Data.HashMap.Strict as H
 import Data.Text (Text)
@@ -84,3 +86,14 @@ renderTemplate varTable = encode
             _               -> T.empty
         decodeToken _ (IncludeTok f) =
           unsafePerformIO $ encode . T.init <$> TI.readFile (T.unpack f)
+
+-- | Similar to renderTemplate, only it takes JSON 'Text' instead of
+-- a 'HashMap'
+renderTemplate' :: Text -- ^ JSON data, for variables inside a given
+                        --   template
+                -> Text -- ^ Template
+                -> Text
+renderTemplate' json tpl =
+  case decode' . L.pack $ T.unpack json of
+    (Just hash) -> renderTemplate hash tpl
+    Nothing     -> T.empty

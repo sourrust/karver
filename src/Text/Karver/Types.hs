@@ -14,6 +14,8 @@ module Text.Karver.Types
 , Value(..)
 ) where
 
+import Control.Applicative ((<$>))
+import qualified Data.Aeson as A
 import Data.Text (Text)
 import Data.HashMap.Strict
 import Data.Vector
@@ -67,3 +69,9 @@ data Value = Literal Text
            --   — which isn't desirable, because their can be nested
            --   'List's.
            deriving (Show)
+
+instance A.FromJSON Value where
+  parseJSON o@(A.Object _) = Object <$> A.parseJSON o
+  parseJSON a@(A.Array _)  = List <$> A.parseJSON a
+  parseJSON v              = Literal <$> A.parseJSON v
+  {-# INLINE parseJSON #-}

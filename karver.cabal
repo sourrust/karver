@@ -33,7 +33,8 @@ library
                   text >= 0.11,
                   unordered-containers >= 0.2,
                   vector >= 0.10,
-                  attoparsec >= 0.10
+                  attoparsec >= 0.10,
+                  aeson >= 0.6
 
 test-suite spec
   type:           exitcode-stdio-1.0
@@ -46,4 +47,6 @@ test-suite spec
                   unordered-containers >= 0.2,
                   attoparsec >= 0.10,
                   vector >= 0.10,
+                  aeson >= 0.6,
+                  bytestring >= 0.10,
                   hspec >= 1.5

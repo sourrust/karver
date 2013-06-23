@@ -68,7 +68,7 @@ data Value = Literal Text
            -- ^ An alias for 'Vector', that can hold all three 'Value's
            --   — which isn't desirable, because their can be nested
            --   'List's.
-           deriving (Show)
+           deriving (Show, Eq)
 
 instance A.FromJSON Value where
   parseJSON o@(A.Object _) = Object <$> A.parseJSON o

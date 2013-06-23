@@ -3,45 +3,15 @@
 module Text.KarverSpec (spec) where
 
 import Text.Karver
-import Text.Karver.Types
 
 import Prelude hiding (unlines, concat)
-import Data.HashMap.Strict (fromList)
 import Data.Text (Text, append, unlines, concat)
 import qualified Data.Text.IO as TI
-import qualified Data.Vector as V
 import System.IO.Unsafe (unsafePerformIO)
 import Test.Hspec
 
 renderer :: Text -> Text
-renderer = renderTemplate
-  (fromList $ [ ("project",     Literal "karver")
-              , ("language",    Literal "haskell")
-              , ("ver-control", Literal "git")
-              , ("template",    Object $ fromList
-                                  [ ("name", "karver")])
-              , ("libraries",   List $ V.fromList
-                                  [ Literal "attoparsec"
-                                  , Literal "hspec"
-                                  ])
-              , ("titles",      List $ V.fromList
-                                  [ Object $ fromList
-                                    [ ("name", "Karver the Template")
-                                    , ("id",   "karver_the_template")
-                                    ]
-                                  , Object $ fromList
-                                    [ ("name", "BDD with Hspec")
-                                    , ("id",   "bdd_with_hspec")
-                                    ]
-                                  , Object $ fromList
-                                    [ ("name", "Attoparsec the Parser")
-                                    , ("id",   "attoparsec_the_parser")
-                                    ]
-                                  ])
-              ])
-
-rendererWithJSON :: Text -> Text
-rendererWithJSON t =
+renderer t =
   let json  = unsafePerformIO $ TI.readFile "test/json/test-data.json"
   in renderTemplate' json t
 

@@ -11,14 +11,14 @@ import Data.Text (Text, concat, pack, unlines)
 import Test.Hspec
 
 literal, variable, condition, loop, include
-  :: Text -> Either String Tokens
+  :: Text -> Either String Token
 literal   = parseOnly literalParser
 variable  = parseOnly variableParser
 condition = parseOnly conditionParser
 loop      = parseOnly loopParser
 include   = parseOnly includeParser
 
-noDemVariable :: Text -> Either String Tokens
+noDemVariable :: Text -> Either String Token
 noDemVariable = parseOnly variableParser'
 
 isLeft :: Either a b -> Bool

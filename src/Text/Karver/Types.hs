@@ -21,10 +21,10 @@ import Data.HashMap.Strict
 import Data.Vector
 
 -- | When dealing with the syntax of karver, we first translate the given
--- 'Text' in 'Tokens' for easier manipulation. Each 'Tokens' type is
+-- 'Text' into 'Token's for easier manipulation. Each 'Token' type is
 -- a representation of a certain type of data.
 data Token = LiteralTok   Text
-           -- ^ Literal token. This is the default 'Tokens' that gets
+           -- ^ Literal token. This is the default 'Token' that gets
            --   matched only if it isn't any of the others.
            | IdentityTok  Text
            -- ^ Identity token. This is for a regular variable with no

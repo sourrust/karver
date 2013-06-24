@@ -28,7 +28,7 @@ import Data.Attoparsec.Text
 import Data.Text (Text, empty, pack)
 import Control.Applicative ((<|>), (<$>), (*>), (<*))
 
--- | Top level 'Parser' that will translate 'Text' into ['Tokens']
+-- | Top level 'Parser' that will translate 'Text' into ['Token']
 templateParser :: Parser [Tokens]
 templateParser = many1 $ choice [ variableParser
                                 , conditionParser
@@ -84,7 +84,7 @@ variableParser_ fn = fn $ do
 variableParser, variableParser' :: Parser Tokens
 
 -- | 'Parser' for all the variable types. Returning on of the following
--- 'Tokens':
+-- 'Token's:
 --
 -- * 'IncludeTok'
 --
@@ -94,7 +94,7 @@ variableParser, variableParser' :: Parser Tokens
 variableParser  = variableParser_ identityDelimiter
 
 -- | 'Parser' for all the variable types. Returning on of the following
--- 'Tokens':
+-- 'Token's:
 --
 -- * 'IncludeTok'
 --

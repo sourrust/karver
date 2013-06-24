@@ -29,7 +29,7 @@ import Data.Text (Text, empty, pack)
 import Control.Applicative ((<|>), (<$>), (*>), (<*))
 
 -- | Top level 'Parser' that will translate 'Text' into ['Token']
-templateParser :: Parser [Tokens]
+templateParser :: Parser [Token]
 templateParser = many1 $ choice [ variableParser
                                 , conditionParser
                                 , loopParser
@@ -39,7 +39,7 @@ templateParser = many1 $ choice [ variableParser
 
 
 -- | Takes everything until it reaches a @{@, resulting in the 'LiteralTok'
-literalParser :: Parser Tokens
+literalParser :: Parser Token
 literalParser = do
   html <- takeWhile1 (/= '{')
   return $ LiteralTok html
@@ -62,7 +62,7 @@ expressionDelimiter = delimiterParser "{%" "%}"
 
 -- General parser for the several variable types. It is basically used to
 -- not repeat parsers with and without a delimiter.
-variableParser_ :: (Parser Tokens -> Parser Tokens) -> Parser Tokens
+variableParser_ :: (Parser Token -> Parser Token) -> Parser Token
 variableParser_ fn = fn $ do
   ident <- takeTill (inClass " .[}")
   peek <- peekChar
@@ -81,7 +81,7 @@ variableParser_ fn = fn $ do
     Nothing    -> return $ IdentityTok ident
     _          -> fail "variableParser_: failed with no token to apply."
 
-variableParser, variableParser' :: Parser Tokens
+variableParser, variableParser' :: Parser Token
 
 -- | 'Parser' for all the variable types. Returning on of the following
 -- 'Token's:
@@ -112,7 +112,7 @@ skipSpaceTillEOL = option () $ skipWhile isHorizontalSpace >> endOfLine
 {-# INLINE skipSpaceTillEOL #-}
 
 -- | 'Parser' for if statements, that will result in the 'ConditionTok'
-conditionParser :: Parser Tokens
+conditionParser :: Parser Token
 conditionParser = do
   logic <- expressionDelimiter $ do
     string "if"
@@ -131,7 +131,7 @@ conditionParser = do
   return $ ConditionTok logic ifbody elsebody
 
 -- | 'Parser' for for loops, that will result in the 'LoopTok'
-loopParser :: Parser Tokens
+loopParser :: Parser Token
 loopParser = do
   (arr, var) <- expressionDelimiter $ do
     string "for"
@@ -148,7 +148,7 @@ loopParser = do
   return $ LoopTok arr var $ pack loopbody
 
 -- | 'Parser' for includes, that will result in 'IncludeTok'
-includeParser :: Parser Tokens
+includeParser :: Parser Token
 includeParser = expressionDelimiter $ do
   let quote c = char c *> takeTill (== c) <* char c
   string "include"

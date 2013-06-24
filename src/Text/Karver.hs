@@ -41,7 +41,7 @@ renderTemplate varTable = encode
                 (Left err)  -> [LiteralTok $ T.pack err]
                 (Right res) -> res
 
-        merge :: [Tokens] -> Text
+        merge :: [Token] -> Text
         merge = T.concat . map (decodeToken varTable)
         decodeToken _ (LiteralTok x)       = x
         decodeToken vTable (IdentityTok x) =

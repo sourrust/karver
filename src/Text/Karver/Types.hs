@@ -10,7 +10,7 @@
 -- Base types used throughout Karver.
 
 module Text.Karver.Types
-( Tokens(..)
+( Token(..)
 , Value(..)
 ) where
 
@@ -23,7 +23,7 @@ import Data.Vector
 -- | When dealing with the syntax of karver, we first translate the given
 -- 'Text' in 'Tokens' for easier manipulation. Each 'Tokens' type is
 -- a representation of a certain type of data.
-data Tokens = LiteralTok   Text
+data Token = LiteralTok   Text
             -- ^ Literal token. This is the default 'Tokens' that gets
             --   matched only if it isn't any of the others.
             | IdentityTok  Text

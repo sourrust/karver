@@ -33,6 +33,8 @@ since the type is `Text`, it supports Unicode right out of the box.
 Programs using karver might look something like:
 
 ```haskell
+{-# LANGUAGE OverloadedStrings #-}
+
 import Text.Karver
 import qualified Data.HashMap.Strict as H
 import qualified Data.Text.IO as T

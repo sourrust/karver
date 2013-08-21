@@ -33,6 +33,8 @@ since the type is `Text`, it supports Unicode right out of the box.
 Programs using karver might look something like:
 
 ```haskell
+{-# LANGUAGE OverloadedStrings #-}
+
 import Text.Karver
 import qualified Data.HashMap.Strict as H
 import qualified Data.Text.IO as T
@@ -52,6 +54,31 @@ main = do
   tplStr <- T.readFile "path/to/template.html"
   let htmlStr = renderTemplate templateHashMap tplStr
   T.writeFile "path/to/output.html"
+```
+
+or if JSON is more your flavor:
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+
+import Text.Karver
+import qualified Data.HashMap.Strict as H
+import qualified Data.Text as T
+import qualified Data.Text.IO as TI
+import qualified Data.Vector as V
+
+templateHashMap :: Text
+templateHashMap = T.concat $
+  [ "{ \"title\": \"Grocery List\""
+  , ", \"items\": [ \"eggs\", \"flour\", \"cereal\" ]"
+  , "}"
+  ]
+
+main :: IO ()
+main = do
+  tplStr <- TI.readFile "path/to/template.html"
+  let htmlStr = renderTemplate' templateHashMap tplStr
+  TI.writeFile "path/to/output.html"
 ```
 
 # How to Contribute

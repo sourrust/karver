@@ -56,6 +56,31 @@ main = do
   T.writeFile "path/to/output.html"
 ```
 
+or if JSON is more your flavor:
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+
+import Text.Karver
+import qualified Data.HashMap.Strict as H
+import qualified Data.Text as T
+import qualified Data.Text.IO as TI
+import qualified Data.Vector as V
+
+templateHashMap :: Text
+templateHashMap = T.concat $
+  [ "{ \"title\": \"Grocery List\""
+  , ", \"items\": [ \"eggs\", \"flour\", \"cereal\" ]"
+  , "}"
+  ]
+
+main :: IO ()
+main = do
+  tplStr <- TI.readFile "path/to/template.html"
+  let htmlStr = renderTemplate' templateHashMap tplStr
+  TI.writeFile "path/to/output.html"
+```
+
 # How to Contribute
 
 Since karver is in early development, there is still work needed to be

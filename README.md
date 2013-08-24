@@ -36,7 +36,9 @@ Programs using karver might look something like:
 {-# LANGUAGE OverloadedStrings #-}
 
 import Text.Karver
+import Data.HashMap.Strict (HashMap)
 import qualified Data.HashMap.Strict as H
+import Data.Text (Text)
 import qualified Data.Text.IO as T
 import qualified Data.Vector as V
 
@@ -53,7 +55,7 @@ main :: IO ()
 main = do
   tplStr <- T.readFile "path/to/template.html"
   let htmlStr = renderTemplate templateHashMap tplStr
-  T.writeFile "path/to/output.html"
+  T.writeFile "path/to/output.html" htmlStr
 ```
 
 or if JSON is more your flavor:

@@ -67,7 +67,7 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as TI
 import qualified Data.Vector as V
 
-templateHashMap :: Text
+templateHashMap :: T.Text
 templateHashMap = T.concat $
   [ "{ \"title\": \"Grocery List\""
   , ", \"items\": [ \"eggs\", \"flour\", \"cereal\" ]"
@@ -78,7 +78,7 @@ main :: IO ()
 main = do
   tplStr <- TI.readFile "path/to/template.html"
   let htmlStr = renderTemplate' templateHashMap tplStr
-  TI.writeFile "path/to/output.html"
+  TI.writeFile "path/to/output.html" htmlStr
 ```
 
 # How to Contribute

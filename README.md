@@ -64,10 +64,11 @@ or if JSON is more your flavor:
 {-# LANGUAGE OverloadedStrings #-}
 
 import Text.Karver
+import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.IO as TI
 
-templateHashMap :: T.Text
+templateHashMap :: Text
 templateHashMap = T.concat $
   [ "{ \"title\": \"Grocery List\""
   , ", \"items\": [ \"eggs\", \"flour\", \"cereal\" ]"

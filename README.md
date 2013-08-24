@@ -64,10 +64,8 @@ or if JSON is more your flavor:
 {-# LANGUAGE OverloadedStrings #-}
 
 import Text.Karver
-import qualified Data.HashMap.Strict as H
 import qualified Data.Text as T
 import qualified Data.Text.IO as TI
-import qualified Data.Vector as V
 
 templateHashMap :: T.Text
 templateHashMap = T.concat $

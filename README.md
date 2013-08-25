@@ -36,6 +36,7 @@ Programs using karver might look something like:
 {-# LANGUAGE OverloadedStrings #-}
 
 import Text.Karver
+import Text.Karver.Types
 import Data.HashMap.Strict (HashMap)
 import qualified Data.HashMap.Strict as H
 import Data.Text (Text)

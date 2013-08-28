@@ -10,7 +10,11 @@
 -- The "Text.Karver" interface for translation 'Text' from it's template
 -- syntax, to a generated value — based on the data that was given.
 
-module Text.Karver where
+module Text.Karver
+( renderTemplate
+, renderTemplate'
+, module Text.Karver.Types
+) where
 
 import Text.Karver.Types
 import Text.Karver.Parse

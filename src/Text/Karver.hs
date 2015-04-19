@@ -54,11 +54,8 @@ renderTemplate varTable = encode
             _                  -> T.empty
         decodeToken vTable (ObjectTok i k) =
           case H.lookup i vTable of
-            (Just (Object m)) ->
-              case H.lookup k m of
-                (Just x) -> x
-                Nothing  -> T.empty
-            _              -> T.empty
+            (Just (Object m)) -> maybe T.empty id $ H.lookup k m
+            _                 -> T.empty
         decodeToken vTable (ListTok a i) =
           case H.lookup a vTable of
             (Just (List l)) -> case l V.! i of
@@ -79,9 +76,7 @@ renderTemplate varTable = encode
         decodeToken vTable (LoopTok a v b) =
           case H.lookup a vTable of
             (Just (List l)) ->
-              let toks = case parseOnly templateParser b of
-                           (Left _)  -> []
-                           (Right res) -> res
+              let toks = either (\_ -> []) id $ parseOnly templateParser b
                   mapVars x = let vTable' = H.insert v x vTable
                               in map (decodeToken vTable') toks
               in if null toks

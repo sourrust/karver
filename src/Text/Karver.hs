@@ -51,7 +51,7 @@ renderTemplate varTable = encode
         decodeToken vTable (IdentityTok x) =
           case H.lookup x vTable of
             (Just (Literal s)) -> s
-            _                 -> T.empty
+            _                  -> T.empty
         decodeToken vTable (ObjectTok i k) =
           case H.lookup i vTable of
             (Just (Object m)) ->

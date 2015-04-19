@@ -34,8 +34,22 @@ spec = do
 
       value `shouldSatisfy` isLeft
 
-    it "stops at first {" $ do
-      let text     = "a{ should no parse"
+    it "continue parsing with `{`" $ do
+      let text     = "a{ should parse"
+          value    = literal text
+          expected = Right $ LiteralTok text
+
+      value `shouldBe` expected
+
+    it "stop parsing with `{{`" $ do
+      let text     = "a{{ should not parse"
+          value    = literal text
+          expected = Right $ LiteralTok "a"
+
+      value `shouldBe` expected
+
+    it "stop parsing with `{%`" $ do
+      let text     = "a{% should not parse"
           value    = literal text
           expected = Right $ LiteralTok "a"
 

@@ -22,9 +22,13 @@ module Text.Karver.Parse
 , includeParser
 ) where
 
+import Prelude hiding (take)
+
 import Text.Karver.Types
 
 import Data.Attoparsec.Text
+import Data.Attoparsec.Combinator (lookAhead)
+import Data.Monoid ((<>))
 import Data.Text (Text, empty, pack)
 import Control.Applicative ((<|>), (<$>), (*>), (<*))
 
@@ -40,9 +44,24 @@ templateParser = many1 $ choice [ variableParser
 
 -- | Takes everything until it reaches a @{@, resulting in the 'LiteralTok'
 literalParser :: Parser Token
-literalParser = do
-  html <- takeWhile1 (/= '{')
-  return $ LiteralTok html
+literalParser = LiteralTok <$> _literalParser
+ where
+  _literalParser = do
+    html  <- takeWhile1 (/= '{')
+    isEnd <- atEnd
+    if isEnd
+      then return html
+      else _continueParsing html
+
+  _continueParsing html = do
+    peek <- lookAhead $ take 2
+    case peek of
+      "{{" -> return html
+      "{%" -> return html
+      _    -> do
+        char' <- take 1
+        html' <- _literalParser
+        return $ html <> char' <> html'
 
 -- General function for making parsers that will be surrounded by a curtain
 -- delimiter — which has both a beginning and end.

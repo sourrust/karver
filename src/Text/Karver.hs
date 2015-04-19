@@ -63,15 +63,10 @@ renderTemplate varTable = encode
                                  _           -> T.empty
             _               -> T.empty
         decodeToken _ (ConditionTok c t f) =
-          if hasVariable c
-            then encode t
-            else encode f
+          encode $ if hasVariable c then t else f
           where hasVariable txt =
                   case parseOnly variableParser' txt of
-                    (Right res) ->
-                      if T.null $ decodeToken varTable res
-                        then False
-                        else True
+                    (Right res) -> not . T.null $ decodeToken varTable res
                     _           -> False
         decodeToken vTable (LoopTok a v b) =
           case H.lookup a vTable of

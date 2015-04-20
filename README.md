@@ -1,5 +1,7 @@
 # Karver
 
+[![Build Status](https://travis-ci.org/sourrust/karver.svg?branch=master)](https://travis-ci.org/sourrust/karver)
+
 Karver is a template engine written in Haskell, and the syntax is
 heavily inspired by [jinja2][1].
 

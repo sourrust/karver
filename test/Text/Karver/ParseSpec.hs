@@ -28,34 +28,34 @@ isLeft _        = False
 spec :: Spec
 spec = do
   describe "literalParser" $ do
-    it "no input" $ do
+    it "should return Left with an empty string" $ do
       let noText = empty
           value  = literal noText
 
       value `shouldSatisfy` isLeft
 
-    it "continue parsing with `{`" $ do
+    it "should continue parsing after `{`" $ do
       let text     = "a{ should parse"
           value    = literal text
           expected = Right $ LiteralTok text
 
       value `shouldBe` expected
 
-    it "stop parsing with `{{`" $ do
+    it "should stop parsing on `{{`" $ do
       let text     = "a{{ should not parse"
           value    = literal text
           expected = Right $ LiteralTok "a"
 
       value `shouldBe` expected
 
-    it "stop parsing with `{%`" $ do
+    it "should stop parsing on `{%`" $ do
       let text     = "a{% should not parse"
           value    = literal text
           expected = Right $ LiteralTok "a"
 
       value `shouldBe` expected
 
-    it "until the end" $ do
+    it "should parse all the way to the end" $ do
       let fullText = "all this text is here"
           value    = literal fullText
           expected = Right $ LiteralTok fullText
@@ -63,41 +63,41 @@ spec = do
       value `shouldBe` expected
 
   describe "identityParser" $ do
-    it "no input" $ do
+    it "should return Left with an empty string" $ do
       let noText   = empty
           value    = variable noText
 
       value `shouldSatisfy` isLeft
 
-    it "regular identity" $ do
+    it "should parse identity with spaces" $ do
       let regText  = "{{ name }}"
           value    = variable regText
           expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
-    it "no spaces identity" $ do
+    it "should parse identity without spaces" $ do
       let regText  = "{{name}}"
           value    = variable regText
           expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
-    it "no space on right identity" $ do
+    it "should parse identity with space to the left" $ do
       let rText    = "{{ name}}"
           value    = variable rText
           expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
-    it "no space on left identity" $ do
+    it "should parse identity with space to the right" $ do
       let lText    = "{{name }}"
           value    = variable lText
           expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
-    it "multiple spaces identity" $ do
+    it "should parse identity with multiple spaces" $ do
       let multiText = "{{     name   }}"
           value     = variable multiText
           expected  = Right $ IdentityTok "name"
@@ -105,7 +105,7 @@ spec = do
       value `shouldBe` expected
 
   describe "objectParser" $ do
-    it "regular object" $ do
+    it "should parse normal object variables" $ do
       let regObj   = "{{ person.name }}"
           value    = variable regObj
           expected = Right $ ObjectTok "person" "name"
@@ -113,14 +113,14 @@ spec = do
       value `shouldBe` expected
 
   describe "arrayParser" $ do
-    it "regular array" $ do
+    it "should parse normal array variables" $ do
       let regList  = "{{ names[1] }}"
           value    = variable regList
           expected = Right $ ListTok "names" 1
 
       value `shouldBe` expected
 
-    it "maxBound index array" $ do
+    it "should parse array with max number index" $ do
       let maxInt   = maxBound
           regList  = concat [ "{{ names["
                             , (pack $ show maxInt)
@@ -132,14 +132,14 @@ spec = do
       value `shouldBe` expected
 
   describe "conditionParser" $ do
-    it "single line if statement" $ do
+    it "should parse single line if statement" $ do
       let ifText    = "{% if title %}{{ title }}{% endif %}"
           value     = condition ifText
           expected  = Right $ ConditionTok "title" "{{ title }}" empty
 
       value `shouldBe` expected
 
-    it "multi line if statement" $ do
+    it "should parse multi line if statement" $ do
       let ifText    = unlines [ "{% if title %}"
                               , "  {{ title }}"
                               , "{% endif %}"
@@ -149,7 +149,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "single line if else statement" $ do
+    it "should parse single line if else statement" $ do
       let ifelse   = concat [ "{% if title %}{{ title }}{% else %}"
                             , "no title{% endif %}"
                             ]
@@ -158,7 +158,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "multi line if else statement" $ do
+    it "should parse multi line if else statement" $ do
       let ifText    = unlines [ "{% if title %}"
                               , "  {{ title }}"
                               , "{% else %}"
@@ -173,7 +173,7 @@ spec = do
       value `shouldBe` expected
 
   describe "loopParser" $ do
-    it "single line for loop" $ do
+    it "should parse single line for loop" $ do
       let loopText = concat [ "{% for item in items %}"
                             , "  {{ item }}"
                             , "{% endfor %}"
@@ -183,7 +183,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "multi line for loop" $ do
+    it "should parse multi line for loop" $ do
       let loopText = unlines [ "{% for item in items %}"
                              , "  {{ item }}"
                              , "{% endfor %}"
@@ -194,14 +194,14 @@ spec = do
       value `shouldBe` expected
 
   describe "includeParser" $ do
-    it "import single quote" $ do
+    it "should import file with single quotes" $ do
       let includeText = "{% include 'template.html' %}"
           value       = include includeText
           expected    = Right $ IncludeTok "template.html"
 
       value `shouldBe` expected
 
-    it "import double quote" $ do
+    it "should import file with double quotes" $ do
       let includeText = "{% include \"template.html\" %}"
           value       = include includeText
           expected    = Right $ IncludeTok "template.html"
@@ -209,19 +209,19 @@ spec = do
       value `shouldBe` expected
 
   describe "no delimiter" $ do
-    it "identity" $ do
+    it "should parse identity variable" $ do
       let value    = noDemVariable "name"
           expected = Right $ IdentityTok "name"
 
       value `shouldBe` expected
 
-    it "object" $ do
+    it "should parse object variable" $ do
       let value    = noDemVariable "project.name"
           expected = Right $ ObjectTok "project" "name"
 
       value `shouldBe` expected
 
-    it "list" $ do
+    it "should  parse list variable" $ do
       let value    = noDemVariable "names[4]"
           expected = Right $ ListTok "names" 4
 

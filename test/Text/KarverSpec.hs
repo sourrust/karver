@@ -18,28 +18,28 @@ renderer t =
 spec :: Spec
 spec = do
   describe "renderTemplate" $ do
-    it "identity at the end" $ do
+    it "should render template with identity at the end" $ do
       let endText  = "Template engine named {{ project }}"
           value    = renderer endText
           expected = "Template engine named karver"
 
       value `shouldBe` expected
 
-    it "identity at the beginning" $ do
+    it "should render template with identity at the beginning" $ do
       let beginText = "{{ language }} is what we are written in."
           value     = renderer beginText
           expected  = "haskell is what we are written in."
 
       value `shouldBe` expected
 
-    it "identity in the middle" $ do
+    it "should render template with identity in the middle" $ do
       let middleText = "All kept in a {{ ver-control }} repo, on Github."
           value      = renderer middleText
           expected   = "All kept in a git repo, on Github."
 
       value `shouldBe` expected
 
-    it "multiple identities" $ do
+    it "should render template with multiple identities" $ do
       let multiText = append "{{ project }} is written in {{ language }}"
                              ", held in {{ ver-control }}."
           value     = renderer multiText
@@ -47,7 +47,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "multiple line of identities" $ do
+    it "should render template with multiple lines of identities" $ do
       let multiText = unlines
                         [ "{{ project }} is the name"
                         , "making template is my game"
@@ -64,42 +64,42 @@ spec = do
 
       value `shouldBe` expected
 
-    it "object identity" $ do
+    it "should render template with object identity" $ do
       let objText  = "Templating with {{ template.name }} is easy."
           value    = renderer objText
           expected = "Templating with karver is easy."
 
       value `shouldBe` expected
 
-    it "mix of object a identity #1" $ do
+    it "should render template with a mix of object and identity #1" $ do
       let mixText  = "My {{ project }} is your {{ template.name }}."
           value    = renderer mixText
           expected = "My karver is your karver."
 
       value `shouldBe` expected
 
-    it "mix of object a identity #2" $ do
+    it "should render template with a mix of object and identity #2" $ do
       let mixText  = "My {{ template.name }} is your {{ project }}."
           value    = renderer mixText
           expected = "My karver is your karver."
 
       value `shouldBe` expected
 
-    it "list identity" $ do
+    it "should render template with a list identity" $ do
       let arrText  = "karver uses {{ libraries[0] }} for parsing."
           value    = renderer arrText
           expected = "karver uses attoparsec for parsing."
 
       value `shouldBe` expected
 
-    it "mix of list and identity" $ do
+    it "should render template with a mix of list and identity" $ do
       let arrText  = "{{ project }} uses {{ libraries[1] }} for testing."
           value    = renderer arrText
           expected = "karver uses hspec for testing."
 
       value `shouldBe` expected
 
-    it "mix of list and object" $ do
+    it "should render template with a mix of list and object" $ do
       let arrText  = append "{{ template.name }} uses"
                             " {{ libraries[1] }} for testing."
           value    = renderer arrText
@@ -107,14 +107,14 @@ spec = do
 
       value `shouldBe` expected
 
-    it "true evaluated if" $ do
+    it "should render template with true evaluated if" $ do
       let trueText = "{% if project %}{{ project }}{% endif %} is true"
           value    = renderer trueText
           expected = "karver is true"
 
       value `shouldBe` expected
 
-    it "false evaluated if" $ do
+    it "should not render template with false evaluated if" $ do
       let falseText = concat [ "{% if closed %}"
                              , "  karver is closed source"
                              , "{% endif %}"
@@ -124,7 +124,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "check if object element exists" $ do
+    it "should check if object element exists" $ do
       let elemText = concat [ "{% if template.name %}"
                             , "  {{ template.name }} is the template."
                             , "{% endif %}"
@@ -134,7 +134,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "check if list element exists" $ do
+    it "should check if list element exists" $ do
       let elemText = concat [ "{% if libraries[1] %}"
                             , concat [ "  {{ libraries[1] }} makes"
                                      , " testing enjoyable!"
@@ -146,7 +146,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "false evaluated if else" $ do
+    it "should render template of false evaluated if else" $ do
       let falseText = concat [ "{% if closed %}"
                              , "  karver is closed source"
                              , "{% else %}"
@@ -158,7 +158,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "false evaluated if else, for objects" $ do
+    it "should render template of false evaluated if else, for objects" $ do
       let elemText = concat [ "{% if template.license %}"
                             , "  {{ template.license }} is the license."
                             , "{% else %}"
@@ -170,7 +170,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "loop over an array, single variable #1" $ do
+    it "should render template looping over an array #1" $ do
       let loopText = concat [ "Some libraries used: "
                             , "{% for library in libraries %}"
                             , "{{ library }} "
@@ -181,7 +181,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "loop over an array, single variable #2" $ do
+    it "should render template looping over an array #2" $ do
       let loopText = unlines [ "Some libraries used:"
                              , "{% for library in libraries %}"
                              , "  * {{ library }}"
@@ -195,7 +195,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "loop over an array, with objects #1" $ do
+    it "should render template looping over an array with objects #1" $ do
       let withObj  = concat [ "{% for title in titles %}"
                             , "<a id=\"{{ title.id }}\">"
                             , "{{ title.name }}</a>"
@@ -211,7 +211,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "loop over an array, with objects #2" $ do
+    it "should render template looping over an array with objects #2" $ do
       let withObj  = unlines [ "{% for title in titles %}"
                              , concat [ "<a id=\"{{ title.id }}\">"
                                       , "{{ title.name }}</a>"
@@ -230,14 +230,14 @@ spec = do
 
       value `shouldBe` expected
 
-    it "include a template alone" $ do
+    it "should include a template alone" $ do
       let includeText = "{% include 'test/template/text.html' %}"
           value       = renderer includeText
           expected    = "Content in the file."
 
       value `shouldBe` expected
 
-    it "include a template with surroundind markup" $ do
+    it "should include a template surrounded by markup #1" $ do
       let includeText = concat [ "<footer>"
                                , "{% include 'test/template/text.html' %}"
                                , "</footer>"
@@ -247,7 +247,7 @@ spec = do
 
       value `shouldBe` expected
 
-    it "include a template with surroundind markup #2" $ do
+    it "should include a template surrounded by markup #2" $ do
       let includeText = unlines [ "<ul>"
                                 , concat [ "{% include "
                                          , "'test/template/template.html"

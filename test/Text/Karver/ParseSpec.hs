@@ -64,7 +64,7 @@ spec = do
 
   describe "identityParser" $ do
     it "no input" $ do
-      let noText   = ""
+      let noText   = empty
           value    = variable noText
 
       value `shouldSatisfy` isLeft
@@ -135,7 +135,7 @@ spec = do
     it "single line if statement" $ do
       let ifText    = "{% if title %}{{ title }}{% endif %}"
           value     = condition ifText
-          expected  = Right $ ConditionTok "title" "{{ title }}" ""
+          expected  = Right $ ConditionTok "title" "{{ title }}" empty
 
       value `shouldBe` expected
 
@@ -145,7 +145,7 @@ spec = do
                               , "{% endif %}"
                               ]
           value     = condition ifText
-          expected  = Right $ ConditionTok "title" "  {{ title }}\n" ""
+          expected  = Right $ ConditionTok "title" "  {{ title }}\n" empty
 
       value `shouldBe` expected
 

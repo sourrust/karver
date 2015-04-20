@@ -5,7 +5,7 @@ module Text.KarverSpec (spec) where
 import Text.Karver
 
 import Prelude hiding (unlines, concat)
-import Data.Text (Text, append, unlines, concat)
+import Data.Text (Text, append, concat, empty, unlines)
 import qualified Data.Text.IO as TI
 import System.IO.Unsafe (unsafePerformIO)
 import Test.Hspec
@@ -120,7 +120,7 @@ spec = do
                              , "{% endif %}"
                              ]
           value     = renderer falseText
-          expected  = ""
+          expected  = empty
 
       value `shouldBe` expected
 

@@ -7,7 +7,7 @@ import Text.Karver.Types
 
 import Prelude hiding (concat, unlines)
 import Data.Attoparsec.Text (parseOnly)
-import Data.Text (Text, concat, pack, unlines)
+import Data.Text (Text, concat, empty, pack, unlines)
 import Test.Hspec
 
 literal, variable, condition, loop, include
@@ -29,7 +29,7 @@ spec :: Spec
 spec = do
   describe "literalParser" $ do
     it "no input" $ do
-      let noText = ""
+      let noText = empty
           value  = literal noText
 
       value `shouldSatisfy` isLeft

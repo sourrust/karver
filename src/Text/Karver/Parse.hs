@@ -54,14 +54,14 @@ literalParser = LiteralTok <$> _literalParser
       else _continueParsing html
 
   _continueParsing html = do
-    peek <- lookAhead $ take 2
+    peek <- lookAhead $ take 2 <|> take 1
     case peek of
       "{{" -> return html
       "{%" -> return html
+      "{"  -> (html <>) <$> take 1
       _    -> do
-        char' <- take 1
-        html' <- _literalParser
-        return $ html <> char' <> html'
+        currentText <- (html <>) <$> take 1
+        (currentText  <>) <$> _literalParser
 
 -- General function for making parsers that will be surrounded by a curtain
 -- delimiter — which has both a beginning and end.

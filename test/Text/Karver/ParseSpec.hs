@@ -55,6 +55,13 @@ spec = do
 
       value `shouldBe` expected
 
+    it "should not fail with `{` at the end" $ do
+      let text     = "a sentence with {"
+          value    = literal text
+          expected = Right $ LiteralTok text
+
+      value `shouldBe` expected
+
     it "should parse all the way to the end" $ do
       let fullText = "all this text is here"
           value    = literal fullText

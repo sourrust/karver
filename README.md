@@ -94,7 +94,7 @@ cabal configure --enable-tests
 
 If the configure set fails you are going to want to install the missing
 packages and try again. Karver is built on the [latest Haskell
-Platform][5] and a few other dependencies.
+Platform][2] and a few other dependencies.
 
 ```bash
 cabal update
@@ -108,11 +108,11 @@ and `cabal test` to run the test suite.
 
 ## Writing Tests
 
-Karver uses [`hspec`][6] for testing. Tests are located in the `test/`
+Karver uses [`hspec`][3] for testing. Tests are located in the `test/`
 directory and each file, being tested, has it's own corresponding Spec
 file. For example, `Text/Karver/Parser.hs` in `src/`, has a spec file
 `Text/Karver/ParserSpec.hs` inside of `test/`. Follow this rule if you
-add a new file that you want to test, because [`Spec.hs`][7] discovers
+add a new file that you want to test, because [`Spec.hs`][4] discovers
 the files with the name, so it needs Spec prefixing the file name for
 hspec to add it to the suite.
 
@@ -130,6 +130,6 @@ You can add more variable if needed, but the **value should be
 expected**, is just my personal preference to how the test should end.
 
 [1]: http://jinja.pocoo.org/
-[5]: http://www.haskell.org/platform/
-[6]: http://hspec.github.io/
-[7]: https://github.com/sourrust/karver/blob/master/test/Spec.hs
+[2]: http://www.haskell.org/platform/
+[3]: http://hspec.github.io/
+[4]: https://github.com/sourrust/karver/blob/master/test/Spec.hs

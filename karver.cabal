@@ -4,7 +4,7 @@ cabal-version:    >= 1.8
 build-type:       Simple
 license:          BSD3
 license-file:     LICENSE
-copyright:        (c) 2013 Jeremy Hull
+copyright:        (c) 2015 Jeremy Hull
 author:           Jeremy Hull <sourdrums@gmail.com>
 maintainer:       Jeremy Hull <sourdrums@gmail.com>
 bug-reports:      https://github.com/sourrust/karver/issues

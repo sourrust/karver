@@ -1,6 +1,6 @@
 -- |
 -- Module:      Data.Karver.Parse
--- Copyright:   Jeremy Hull 2013
+-- Copyright:   Jeremy Hull 2015
 -- License:     BSD3
 --
 -- Maintainer:  Jeremy Hull <sourdrums@gmail.com>

@@ -9,6 +9,3 @@
 .cabal-sandbox/
 cabal.sandbox.config
 dist/
-
-# Generated docs
-docs/

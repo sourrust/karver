@@ -6,6 +6,8 @@
 *.hi
 
 # cabal build
+.cabal-sandbox/
+cabal.sandbox.config
 dist/
 
 # Generated docs
